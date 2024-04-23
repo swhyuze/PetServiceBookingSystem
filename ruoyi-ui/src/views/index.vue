@@ -55,8 +55,8 @@
             size="mini"
             icon="el-icon-cloudy"
             plain
-            @click="goTarget('https://gitee.com/y_project/RuoYi-Vue')"
-            >访问码云</el-button
+            @click="goTarget('https://github.com/swhyuze/PetServiceBookingSystem')"
+            >github</el-button
           >
           <el-button
             size="mini"

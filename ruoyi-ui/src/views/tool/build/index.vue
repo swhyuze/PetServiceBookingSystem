@@ -624,7 +624,6 @@ $lighterBlue: #409EFF;
     }
   }
 }
-
 .center-board-row {
   padding: 12px 12px 15px 12px;
   box-sizing: border-box;
