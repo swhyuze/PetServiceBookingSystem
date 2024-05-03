@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.adm.mapper.AdmPsbsPettpMapper">
+    
+    <resultMap type="AdmPsbsPettp" id="AdmPsbsPettpResult">
+        <result property="ptid"    column="ptid"    />
+        <result property="ptname"    column="ptname"    />
+        <result property="ptps"    column="ptps"    />
+    </resultMap>
+
+    <sql id="selectAdmPsbsPettpVo">
+        select ptid, ptname, ptps from psbs_pettp
+    </sql>
+
+    <select id="selectAdmPsbsPettpList" parameterType="AdmPsbsPettp" resultMap="AdmPsbsPettpResult">
+        <include refid="selectAdmPsbsPettpVo"/>
+        <where>  
+            <if test="ptname != null  and ptname != ''"> and ptname like concat('%', #{ptname}, '%')</if>
+            <if test="ptps != null  and ptps != ''"> and ptps like concat('%', #{ptps}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectAdmPsbsPettpByPtid" parameterType="Long" resultMap="AdmPsbsPettpResult">
+        <include refid="selectAdmPsbsPettpVo"/>
+        where ptid = #{ptid}
+    </select>
+        
+    <insert id="insertAdmPsbsPettp" parameterType="AdmPsbsPettp" useGeneratedKeys="true" keyProperty="ptid">
+        insert into psbs_pettp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ptname != null and ptname != ''">ptname,</if>
+            <if test="ptps != null">ptps,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ptname != null and ptname != ''">#{ptname},</if>
+            <if test="ptps != null">#{ptps},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAdmPsbsPettp" parameterType="AdmPsbsPettp">
+        update psbs_pettp
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ptname != null and ptname != ''">ptname = #{ptname},</if>
+            <if test="ptps != null">ptps = #{ptps},</if>
+        </trim>
+        where ptid = #{ptid}
+    </update>
+
+    <delete id="deleteAdmPsbsPettpByPtid" parameterType="Long">
+        delete from psbs_pettp where ptid = #{ptid}
+    </delete>
+
+    <delete id="deleteAdmPsbsPettpByPtids" parameterType="String">
+        delete from psbs_pettp where ptid in 
+        <foreach item="ptid" collection="array" open="(" separator="," close=")">
+            #{ptid}
+        </foreach>
+    </delete>
+</mapper>
