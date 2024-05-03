@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.adm.mapper.AdmPsbsClerkMapper">
+    
+    <resultMap type="AdmPsbsClerk" id="AdmPsbsClerkResult">
+        <result property="clid"    column="clid"    />
+        <result property="clname"    column="clname"    />
+        <result property="clsex"    column="clsex"    />
+        <result property="clnum"    column="clnum"    />
+        <result property="mid"    column="mid"    />
+        <result property="uid"    column="uid"    />
+    </resultMap>
+
+    <resultMap id="AdmPsbsClerkAdmPsbsClkserResult" type="AdmPsbsClerk" extends="AdmPsbsClerkResult">
+        <collection property="admPsbsClkserList" notNullColumn="sub_clser" javaType="java.util.List" resultMap="AdmPsbsClkserResult" />
+    </resultMap>
+
+    <resultMap type="AdmPsbsClkser" id="AdmPsbsClkserResult">
+        <result property="clser"    column="sub_clser"    />
+        <result property="clid"    column="sub_clid"    />
+        <result property="stid"    column="sub_stid"    />
+    </resultMap>
+
+    <sql id="selectAdmPsbsClerkVo">
+        select clid, clname, clsex, clnum, mid, uid from psbs_clerk
+    </sql>
+
+    <select id="selectAdmPsbsClerkList" parameterType="AdmPsbsClerk" resultMap="AdmPsbsClerkResult">
+        <include refid="selectAdmPsbsClerkVo"/>
+        <where>  
+            <if test="clname != null  and clname != ''"> and clname like concat('%', #{clname}, '%')</if>
+            <if test="clsex != null "> and clsex = #{clsex}</if>
+            <if test="clnum != null  and clnum != ''"> and clnum = #{clnum}</if>
+            <if test="mid != null "> and mid like concat('%', #{mid}, '%')</if>
+            <if test="uid != null "> and uid like concat('%', #{uid}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectAdmPsbsClerkByClid" parameterType="Long" resultMap="AdmPsbsClerkAdmPsbsClkserResult">
+        select a.clid, a.clname, a.clsex, a.clnum, a.mid, a.uid,
+ b.clser as sub_clser, b.clid as sub_clid, b.stid as sub_stid
+        from psbs_clerk a
+        left join psbs_clkser b on b.clid = a.clid
+        where a.clid = #{clid}
+    </select>
+        
+    <insert id="insertAdmPsbsClerk" parameterType="AdmPsbsClerk" useGeneratedKeys="true" keyProperty="clid">
+        insert into psbs_clerk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clname != null and clname != ''">clname,</if>
+            <if test="clsex != null">clsex,</if>
+            <if test="clnum != null">clnum,</if>
+            <if test="mid != null">mid,</if>
+            <if test="uid != null">uid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clname != null and clname != ''">#{clname},</if>
+            <if test="clsex != null">#{clsex},</if>
+            <if test="clnum != null">#{clnum},</if>
+            <if test="mid != null">#{mid},</if>
+            <if test="uid != null">#{uid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAdmPsbsClerk" parameterType="AdmPsbsClerk">
+        update psbs_clerk
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clname != null and clname != ''">clname = #{clname},</if>
+            <if test="clsex != null">clsex = #{clsex},</if>
+            <if test="clnum != null">clnum = #{clnum},</if>
+            <if test="mid != null">mid = #{mid},</if>
+            <if test="uid != null">uid = #{uid},</if>
+        </trim>
+        where clid = #{clid}
+    </update>
+
+    <delete id="deleteAdmPsbsClerkByClid" parameterType="Long">
+        delete from psbs_clerk where clid = #{clid}
+    </delete>
+
+    <delete id="deleteAdmPsbsClerkByClids" parameterType="String">
+        delete from psbs_clerk where clid in 
+        <foreach item="clid" collection="array" open="(" separator="," close=")">
+            #{clid}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteAdmPsbsClkserByClids" parameterType="String">
+        delete from psbs_clkser where clid in 
+        <foreach item="clid" collection="array" open="(" separator="," close=")">
+            #{clid}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAdmPsbsClkserByClid" parameterType="Long">
+        delete from psbs_clkser where clid = #{clid}
+    </delete>
+
+    <insert id="batchAdmPsbsClkser">
+        insert into psbs_clkser( clser, clid, stid) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.clser}, #{item.clid}, #{item.stid})
+        </foreach>
+    </insert>
+</mapper>
