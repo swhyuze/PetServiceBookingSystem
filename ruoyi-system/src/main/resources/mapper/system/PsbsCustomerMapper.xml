@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.PsbsCustomerMapper">
+    
+    <resultMap type="PsbsCustomer" id="PsbsCustomerResult">
+        <result property="cuid"    column="cuid"    />
+        <result property="cusex"    column="cusex"    />
+        <result property="cunum"    column="cunum"    />
+        <result property="cuname"    column="cuname"    />
+        <result property="uid"    column="uid"    />
+        <result property="cutp"    column="cutp"    />
+    </resultMap>
+
+    <sql id="selectPsbsCustomerVo">
+        select cuid, cusex, cunum, cuname, uid, cutp from psbs_customer
+    </sql>
+
+    <select id="selectPsbsCustomerList" parameterType="PsbsCustomer" resultMap="PsbsCustomerResult">
+        <include refid="selectPsbsCustomerVo"/>
+        <where>  
+            <if test="cusex != null "> and cusex = #{cusex}</if>
+            <if test="cunum != null  and cunum != ''"> and cunum like concat('%', #{cunum}, '%')</if>
+            <if test="cuname != null  and cuname != ''"> and cuname like concat('%', #{cuname}, '%')</if>
+            <if test="uid != null "> and uid = #{uid}</if>
+            <if test="cutp != null "> and cutp = #{cutp}</if>
+        </where>
+    </select>
+    
+    <select id="selectPsbsCustomerByCuid" parameterType="Long" resultMap="PsbsCustomerResult">
+        <include refid="selectPsbsCustomerVo"/>
+        where cuid = #{cuid}
+    </select>
+        
+    <insert id="insertPsbsCustomer" parameterType="PsbsCustomer" useGeneratedKeys="true" keyProperty="cuid">
+        insert into psbs_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cusex != null">cusex,</if>
+            <if test="cunum != null">cunum,</if>
+            <if test="cuname != null">cuname,</if>
+            <if test="uid != null">uid,</if>
+            <if test="cutp != null">cutp,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cusex != null">#{cusex},</if>
+            <if test="cunum != null">#{cunum},</if>
+            <if test="cuname != null">#{cuname},</if>
+            <if test="uid != null">#{uid},</if>
+            <if test="cutp != null">#{cutp},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePsbsCustomer" parameterType="PsbsCustomer">
+        update psbs_customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cusex != null">cusex = #{cusex},</if>
+            <if test="cunum != null">cunum = #{cunum},</if>
+            <if test="cuname != null">cuname = #{cuname},</if>
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="cutp != null">cutp = #{cutp},</if>
+        </trim>
+        where cuid = #{cuid}
+    </update>
+
+    <delete id="deletePsbsCustomerByCuid" parameterType="Long">
+        delete from psbs_customer where cuid = #{cuid}
+    </delete>
+
+    <delete id="deletePsbsCustomerByCuids" parameterType="String">
+        delete from psbs_customer where cuid in 
+        <foreach item="cuid" collection="array" open="(" separator="," close=")">
+            #{cuid}
+        </foreach>
+    </delete>
+</mapper>

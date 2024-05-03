@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.adm.mapper.AdmPsbsManagerMapper">
+    
+    <resultMap type="AdmPsbsManager" id="AdmPsbsManagerResult">
+        <result property="mid"    column="mid"    />
+        <result property="msex"    column="msex"    />
+        <result property="mnum"    column="mnum"    />
+        <result property="maddress"    column="maddress"    />
+        <result property="mname"    column="mname"    />
+        <result property="msname"    column="msname"    />
+        <result property="uid"    column="uid"    />
+    </resultMap>
+
+    <sql id="selectAdmPsbsManagerVo">
+        select mid, msex, mnum, maddress, mname, msname, uid from psbs_manager
+    </sql>
+
+    <select id="selectAdmPsbsManagerList" parameterType="AdmPsbsManager" resultMap="AdmPsbsManagerResult">
+        <include refid="selectAdmPsbsManagerVo"/>
+        <where>  
+            <if test="mid != null "> and mid = #{mid}</if>
+            <if test="msex != null "> and msex = #{msex}</if>
+            <if test="mnum != null  and mnum != ''"> and mnum = #{mnum}</if>
+            <if test="maddress != null  and maddress != ''"> and maddress like concat('%', #{maddress}, '%')</if>
+            <if test="mname != null  and mname != ''"> and mname like concat('%', #{mname}, '%')</if>
+            <if test="msname != null  and msname != ''"> and msname like concat('%', #{msname}, '%')</if>
+            <if test="uid != null "> and uid = #{uid}</if>
+        </where>
+    </select>
+    
+    <select id="selectAdmPsbsManagerByMid" parameterType="Long" resultMap="AdmPsbsManagerResult">
+        <include refid="selectAdmPsbsManagerVo"/>
+        where mid = #{mid}
+    </select>
+        
+    <insert id="insertAdmPsbsManager" parameterType="AdmPsbsManager" useGeneratedKeys="true" keyProperty="mid">
+        insert into psbs_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msex != null">msex,</if>
+            <if test="mnum != null">mnum,</if>
+            <if test="maddress != null">maddress,</if>
+            <if test="mname != null and mname != ''">mname,</if>
+            <if test="msname != null and msname != ''">msname,</if>
+            <if test="uid != null">uid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msex != null">#{msex},</if>
+            <if test="mnum != null">#{mnum},</if>
+            <if test="maddress != null">#{maddress},</if>
+            <if test="mname != null and mname != ''">#{mname},</if>
+            <if test="msname != null and msname != ''">#{msname},</if>
+            <if test="uid != null">#{uid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAdmPsbsManager" parameterType="AdmPsbsManager">
+        update psbs_manager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="msex != null">msex = #{msex},</if>
+            <if test="mnum != null">mnum = #{mnum},</if>
+            <if test="maddress != null">maddress = #{maddress},</if>
+            <if test="mname != null and mname != ''">mname = #{mname},</if>
+            <if test="msname != null and msname != ''">msname = #{msname},</if>
+            <if test="uid != null">uid = #{uid},</if>
+        </trim>
+        where mid = #{mid}
+    </update>
+
+    <delete id="deleteAdmPsbsManagerByMid" parameterType="Long">
+        delete from psbs_manager where mid = #{mid}
+    </delete>
+
+    <delete id="deleteAdmPsbsManagerByMids" parameterType="String">
+        delete from psbs_manager where mid in 
+        <foreach item="mid" collection="array" open="(" separator="," close=")">
+            #{mid}
+        </foreach>
+    </delete>
+</mapper>
