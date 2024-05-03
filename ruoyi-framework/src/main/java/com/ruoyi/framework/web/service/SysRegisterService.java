@@ -1,5 +1,6 @@
 package com.ruoyi.framework.web.service;
 
+import com.ruoyi.system.mapper.SysUserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.constant.CacheConstants;
@@ -35,6 +36,8 @@ public class SysRegisterService
     @Autowired
     private RedisCache redisCache;
 
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
     /**
      * 注册
      */
@@ -85,6 +88,7 @@ public class SysRegisterService
             else
             {
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success")));
+                userRoleMapper.insertUserRoleByUserNameAndRoleId(username, 103L);
             }
         }
         return msg;
