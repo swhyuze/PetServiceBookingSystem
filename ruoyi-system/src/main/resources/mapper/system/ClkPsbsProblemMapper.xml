@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.clk.mapper.ClkPsbsProblemMapper">
+    
+    <resultMap type="ClkPsbsProblem" id="ClkPsbsProblemResult">
+        <result property="proid"    column="proid"    />
+        <result property="protext"    column="protext"    />
+        <result property="prore"    column="prore"    />
+        <result property="proutime"    column="proutime"    />
+        <result property="prortime"    column="prortime"    />
+        <result property="uid"    column="uid"    />
+    </resultMap>
+
+    <sql id="selectClkPsbsProblemVo">
+        select proid, protext, prore, proutime, prortime, uid from psbs_problem
+    </sql>
+
+    <select id="selectClkPsbsProblemList" parameterType="ClkPsbsProblem" resultMap="ClkPsbsProblemResult">
+        <include refid="selectClkPsbsProblemVo"/>
+        <where>  
+            <if test="protext != null  and protext != ''"> and protext = #{protext}</if>
+            <if test="prore != null  and prore != ''"> and prore = #{prore}</if>
+            <if test="proutime != null "> and proutime &gt;= #{proutime}</if>
+            <if test="prortime != null "> and prortime &lt;= #{prortime}</if>
+            <if test="uid != null "> and uid = #{uid}</if>
+        </where>
+    </select>
+    
+    <select id="selectClkPsbsProblemByProid" parameterType="Long" resultMap="ClkPsbsProblemResult">
+        <include refid="selectClkPsbsProblemVo"/>
+        where proid = #{proid}
+    </select>
+        
+    <insert id="insertClkPsbsProblem" parameterType="ClkPsbsProblem" useGeneratedKeys="true" keyProperty="proid">
+        insert into psbs_problem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="protext != null">protext,</if>
+            <if test="prore != null">prore,</if>
+            <if test="proutime != null">proutime,</if>
+            <if test="prortime != null">prortime,</if>
+            <if test="uid != null">uid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="protext != null">#{protext},</if>
+            <if test="prore != null">#{prore},</if>
+            <if test="proutime != null">#{proutime},</if>
+            <if test="prortime != null">#{prortime},</if>
+            <if test="uid != null">#{uid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClkPsbsProblem" parameterType="ClkPsbsProblem">
+        update psbs_problem
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="protext != null">protext = #{protext},</if>
+            <if test="prore != null">prore = #{prore},</if>
+            <if test="proutime != null">proutime = #{proutime},</if>
+            <if test="prortime != null">prortime = #{prortime},</if>
+            <if test="uid != null">uid = #{uid},</if>
+        </trim>
+        where proid = #{proid}
+    </update>
+
+    <delete id="deleteClkPsbsProblemByProid" parameterType="Long">
+        delete from psbs_problem where proid = #{proid}
+    </delete>
+
+    <delete id="deleteClkPsbsProblemByProids" parameterType="String">
+        delete from psbs_problem where proid in 
+        <foreach item="proid" collection="array" open="(" separator="," close=")">
+            #{proid}
+        </foreach>
+    </delete>
+</mapper>
