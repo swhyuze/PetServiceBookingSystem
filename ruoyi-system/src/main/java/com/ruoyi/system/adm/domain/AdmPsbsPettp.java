@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 宠物品种对象 psbs_pettp
  * 
  * @author 御泽
- * @date 2024-05-03
+ * @date 2024-05-06
  */
 public class AdmPsbsPettp extends BaseEntity
 {

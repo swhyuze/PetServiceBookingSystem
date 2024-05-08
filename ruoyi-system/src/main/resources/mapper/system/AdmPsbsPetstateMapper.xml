@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.adm.mapper.AdmPsbsPetstateMapper">
+    
+    <resultMap type="AdmPsbsPetstate" id="AdmPsbsPetstateResult">
+        <result property="pstid"    column="pstid"    />
+        <result property="pid"    column="pid"    />
+        <result property="pstweight"    column="pstweight"    />
+        <result property="psttime"    column="psttime"    />
+        <result property="pstps"    column="pstps"    />
+    </resultMap>
+
+    <sql id="selectAdmPsbsPetstateVo">
+        select pstid, pid, pstweight, psttime, pstps from psbs_petstate
+    </sql>
+
+    <select id="selectAdmPsbsPetstateList" parameterType="AdmPsbsPetstate" resultMap="AdmPsbsPetstateResult">
+        <include refid="selectAdmPsbsPetstateVo"/>
+        <where>  
+            <if test="pid != null "> and pid = #{pid}</if>
+            <if test="params.beginPstweight != null and params.beginPstweight != '' and params.endPstweight != null and params.endPstweight != ''"> and pstweight between #{params.beginPstweight} and #{params.endPstweight}</if>
+            <if test="params.beginPsttime != null and params.beginPsttime != '' and params.endPsttime != null and params.endPsttime != ''"> and psttime between #{params.beginPsttime} and #{params.endPsttime}</if>
+            <if test="pstps != null  and pstps != ''"> and pstps = #{pstps}</if>
+        </where>
+    </select>
+    
+    <select id="selectAdmPsbsPetstateByPstid" parameterType="Long" resultMap="AdmPsbsPetstateResult">
+        <include refid="selectAdmPsbsPetstateVo"/>
+        where pstid = #{pstid}
+    </select>
+        
+    <insert id="insertAdmPsbsPetstate" parameterType="AdmPsbsPetstate" useGeneratedKeys="true" keyProperty="pstid">
+        insert into psbs_petstate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pid != null">pid,</if>
+            <if test="pstweight != null">pstweight,</if>
+            <if test="psttime != null">psttime,</if>
+            <if test="pstps != null">pstps,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pid != null">#{pid},</if>
+            <if test="pstweight != null">#{pstweight},</if>
+            <if test="psttime != null">#{psttime},</if>
+            <if test="pstps != null">#{pstps},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAdmPsbsPetstate" parameterType="AdmPsbsPetstate">
+        update psbs_petstate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null">pid = #{pid},</if>
+            <if test="pstweight != null">pstweight = #{pstweight},</if>
+            <if test="psttime != null">psttime = #{psttime},</if>
+            <if test="pstps != null">pstps = #{pstps},</if>
+        </trim>
+        where pstid = #{pstid}
+    </update>
+
+    <delete id="deleteAdmPsbsPetstateByPstid" parameterType="Long">
+        delete from psbs_petstate where pstid = #{pstid}
+    </delete>
+
+    <delete id="deleteAdmPsbsPetstateByPstids" parameterType="String">
+        delete from psbs_petstate where pstid in 
+        <foreach item="pstid" collection="array" open="(" separator="," close=")">
+            #{pstid}
+        </foreach>
+    </delete>
+</mapper>

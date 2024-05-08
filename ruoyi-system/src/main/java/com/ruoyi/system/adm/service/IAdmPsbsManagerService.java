@@ -7,7 +7,7 @@ import com.ruoyi.system.adm.domain.AdmPsbsManager;
  * 宠物店管理Service接口
  * 
  * @author 御泽
- * @date 2024-05-03
+ * @date 2024-05-06
  */
 public interface IAdmPsbsManagerService 
 {

@@ -10,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 店员管理对象 psbs_clerk
  * 
  * @author 御泽
- * @date 2024-05-03
+ * @date 2024-05-06
  */
 public class AdmPsbsClerk extends BaseEntity
 {

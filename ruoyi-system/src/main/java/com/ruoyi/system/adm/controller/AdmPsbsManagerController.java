@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 宠物店管理Controller
  * 
  * @author 御泽
- * @date 2024-05-03
+ * @date 2024-05-06
  */
 @RestController
 @RequestMapping("/system/adm_manager")

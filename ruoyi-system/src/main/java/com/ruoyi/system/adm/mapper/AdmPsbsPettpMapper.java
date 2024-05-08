@@ -7,7 +7,7 @@ import com.ruoyi.system.adm.domain.AdmPsbsPettp;
  * 宠物品种Mapper接口
  * 
  * @author 御泽
- * @date 2024-05-03
+ * @date 2024-05-06
  */
 public interface AdmPsbsPettpMapper 
 {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.adm.mapper.AdmPsbsPetMapper">
+    
+    <resultMap type="AdmPsbsPet" id="AdmPsbsPetResult">
+        <result property="pid"    column="pid"    />
+        <result property="pname"    column="pname"    />
+        <result property="pps"    column="pps"    />
+        <result property="psex"    column="psex"    />
+        <result property="ptid"    column="ptid"    />
+        <result property="ptpic"    column="ptpic"    />
+    </resultMap>
+
+    <sql id="selectAdmPsbsPetVo">
+        select pid, pname, pps, psex, ptid, ptpic from psbs_pet
+    </sql>
+
+    <select id="selectAdmPsbsPetList" parameterType="AdmPsbsPet" resultMap="AdmPsbsPetResult">
+        <include refid="selectAdmPsbsPetVo"/>
+        <where>  
+            <if test="pname != null  and pname != ''"> and pname like concat('%', #{pname}, '%')</if>
+            <if test="pps != null  and pps != ''"> and pps = #{pps}</if>
+            <if test="psex != null "> and psex = #{psex}</if>
+            <if test="ptid != null "> and ptid = #{ptid}</if>
+        </where>
+    </select>
+    
+    <select id="selectAdmPsbsPetByPid" parameterType="Long" resultMap="AdmPsbsPetResult">
+        <include refid="selectAdmPsbsPetVo"/>
+        where pid = #{pid}
+    </select>
+        
+    <insert id="insertAdmPsbsPet" parameterType="AdmPsbsPet" useGeneratedKeys="true" keyProperty="pid">
+        insert into psbs_pet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pname != null and pname != ''">pname,</if>
+            <if test="pps != null">pps,</if>
+            <if test="psex != null">psex,</if>
+            <if test="ptid != null">ptid,</if>
+            <if test="ptpic != null">ptpic,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pname != null and pname != ''">#{pname},</if>
+            <if test="pps != null">#{pps},</if>
+            <if test="psex != null">#{psex},</if>
+            <if test="ptid != null">#{ptid},</if>
+            <if test="ptpic != null">#{ptpic},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAdmPsbsPet" parameterType="AdmPsbsPet">
+        update psbs_pet
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pname != null and pname != ''">pname = #{pname},</if>
+            <if test="pps != null">pps = #{pps},</if>
+            <if test="psex != null">psex = #{psex},</if>
+            <if test="ptid != null">ptid = #{ptid},</if>
+            <if test="ptpic != null">ptpic = #{ptpic},</if>
+        </trim>
+        where pid = #{pid}
+    </update>
+
+    <delete id="deleteAdmPsbsPetByPid" parameterType="Long">
+        delete from psbs_pet where pid = #{pid}
+    </delete>
+
+    <delete id="deleteAdmPsbsPetByPids" parameterType="String">
+        delete from psbs_pet where pid in 
+        <foreach item="pid" collection="array" open="(" separator="," close=")">
+            #{pid}
+        </foreach>
+    </delete>
+</mapper>

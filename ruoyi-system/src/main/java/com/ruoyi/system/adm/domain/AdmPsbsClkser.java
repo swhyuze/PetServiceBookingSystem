@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 店员服务对象 psbs_clkser
  * 
  * @author 御泽
- * @date 2024-05-03
+ * @date 2024-05-06
  */
 public class AdmPsbsClkser extends BaseEntity
 {
