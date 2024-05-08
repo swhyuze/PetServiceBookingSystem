@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.man.mapper.ManPsbsServiceMapper">
+    
+    <resultMap type="ManPsbsService" id="ManPsbsServiceResult">
+        <result property="serid"    column="serid"    />
+        <result property="stid"    column="stid"    />
+        <result property="clid"    column="clid"    />
+        <result property="mid"    column="mid"    />
+        <result property="pid"    column="pid"    />
+        <result property="serstime"    column="serstime"    />
+        <result property="seretime"    column="seretime"    />
+        <result property="serscore"    column="serscore"    />
+        <result property="serassess"    column="serassess"    />
+        <result property="serstate"    column="serstate"    />
+        <result property="sermoney"    column="sermoney"    />
+    </resultMap>
+
+    <sql id="selectManPsbsServiceVo">
+        select serid, stid, clid, mid, pid, serstime, seretime, serscore, serassess, serstate, sermoney from psbs_service
+    </sql>
+
+    <select id="selectManPsbsServiceList" parameterType="ManPsbsService" resultMap="ManPsbsServiceResult">
+        <include refid="selectManPsbsServiceVo"/>
+        <where>  
+            <if test="stid != null "> and stid = #{stid}</if>
+            <if test="clid != null "> and clid = #{clid}</if>
+            <if test="mid != null "> and mid = #{mid}</if>
+            <if test="pid != null "> and pid = #{pid}</if>
+            <if test="serstime != null "> and serstime = #{serstime}</if>
+            <if test="seretime != null "> and seretime = #{seretime}</if>
+            <if test="serscore != null "> and serscore = #{serscore}</if>
+            <if test="serassess != null  and serassess != ''"> and serassess = #{serassess}</if>
+            <if test="serstate != null "> and serstate = #{serstate}</if>
+            <if test="sermoney != null "> and sermoney = #{sermoney}</if>
+        </where>
+    </select>
+    
+    <select id="selectManPsbsServiceBySerid" parameterType="Long" resultMap="ManPsbsServiceResult">
+        <include refid="selectManPsbsServiceVo"/>
+        where serid = #{serid}
+    </select>
+        
+    <insert id="insertManPsbsService" parameterType="ManPsbsService" useGeneratedKeys="true" keyProperty="serid">
+        insert into psbs_service
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stid != null">stid,</if>
+            <if test="clid != null">clid,</if>
+            <if test="mid != null">mid,</if>
+            <if test="pid != null">pid,</if>
+            <if test="serstime != null">serstime,</if>
+            <if test="seretime != null">seretime,</if>
+            <if test="serscore != null">serscore,</if>
+            <if test="serassess != null">serassess,</if>
+            <if test="serstate != null">serstate,</if>
+            <if test="sermoney != null">sermoney,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stid != null">#{stid},</if>
+            <if test="clid != null">#{clid},</if>
+            <if test="mid != null">#{mid},</if>
+            <if test="pid != null">#{pid},</if>
+            <if test="serstime != null">#{serstime},</if>
+            <if test="seretime != null">#{seretime},</if>
+            <if test="serscore != null">#{serscore},</if>
+            <if test="serassess != null">#{serassess},</if>
+            <if test="serstate != null">#{serstate},</if>
+            <if test="sermoney != null">#{sermoney},</if>
+         </trim>
+    </insert>
+
+    <update id="updateManPsbsService" parameterType="ManPsbsService">
+        update psbs_service
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stid != null">stid = #{stid},</if>
+            <if test="clid != null">clid = #{clid},</if>
+            <if test="mid != null">mid = #{mid},</if>
+            <if test="pid != null">pid = #{pid},</if>
+            <if test="serstime != null">serstime = #{serstime},</if>
+            <if test="seretime != null">seretime = #{seretime},</if>
+            <if test="serscore != null">serscore = #{serscore},</if>
+            <if test="serassess != null">serassess = #{serassess},</if>
+            <if test="serstate != null">serstate = #{serstate},</if>
+            <if test="sermoney != null">sermoney = #{sermoney},</if>
+        </trim>
+        where serid = #{serid}
+    </update>
+
+    <delete id="deleteManPsbsServiceBySerid" parameterType="Long">
+        delete from psbs_service where serid = #{serid}
+    </delete>
+
+    <delete id="deleteManPsbsServiceBySerids" parameterType="String">
+        delete from psbs_service where serid in 
+        <foreach item="serid" collection="array" open="(" separator="," close=")">
+            #{serid}
+        </foreach>
+    </delete>
+</mapper>

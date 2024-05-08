@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.man.mapper.ManPsbsServicetpMapper">
+    
+    <resultMap type="ManPsbsServicetp" id="ManPsbsServicetpResult">
+        <result property="stid"    column="stid"    />
+        <result property="stname"    column="stname"    />
+        <result property="stmoney"    column="stmoney"    />
+        <result property="stmtp"    column="stmtp"    />
+        <result property="stps"    column="stps"    />
+    </resultMap>
+
+    <sql id="selectManPsbsServicetpVo">
+        select stid, stname, stmoney, stmtp, stps from psbs_servicetp
+    </sql>
+
+    <select id="selectManPsbsServicetpList" parameterType="ManPsbsServicetp" resultMap="ManPsbsServicetpResult">
+        <include refid="selectManPsbsServicetpVo"/>
+        <where>  
+            <if test="stname != null  and stname != ''"> and stname like concat('%', #{stname}, '%')</if>
+            <if test="params.beginStmoney != null and params.beginStmoney != '' and params.endStmoney != null and params.endStmoney != ''"> and stmoney between #{params.beginStmoney} and #{params.endStmoney}</if>
+            <if test="stps != null  and stps != ''"> and stps like concat('%', #{stps}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectManPsbsServicetpByStid" parameterType="Long" resultMap="ManPsbsServicetpResult">
+        <include refid="selectManPsbsServicetpVo"/>
+        where stid = #{stid}
+    </select>
+        
+    <insert id="insertManPsbsServicetp" parameterType="ManPsbsServicetp" useGeneratedKeys="true" keyProperty="stid">
+        insert into psbs_servicetp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stname != null and stname != ''">stname,</if>
+            <if test="stmoney != null">stmoney,</if>
+            <if test="stmtp != null">stmtp,</if>
+            <if test="stps != null">stps,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stname != null and stname != ''">#{stname},</if>
+            <if test="stmoney != null">#{stmoney},</if>
+            <if test="stmtp != null">#{stmtp},</if>
+            <if test="stps != null">#{stps},</if>
+         </trim>
+    </insert>
+
+    <update id="updateManPsbsServicetp" parameterType="ManPsbsServicetp">
+        update psbs_servicetp
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stname != null and stname != ''">stname = #{stname},</if>
+            <if test="stmoney != null">stmoney = #{stmoney},</if>
+            <if test="stmtp != null">stmtp = #{stmtp},</if>
+            <if test="stps != null">stps = #{stps},</if>
+        </trim>
+        where stid = #{stid}
+    </update>
+
+    <delete id="deleteManPsbsServicetpByStid" parameterType="Long">
+        delete from psbs_servicetp where stid = #{stid}
+    </delete>
+
+    <delete id="deleteManPsbsServicetpByStids" parameterType="String">
+        delete from psbs_servicetp where stid in 
+        <foreach item="stid" collection="array" open="(" separator="," close=")">
+            #{stid}
+        </foreach>
+    </delete>
+</mapper>

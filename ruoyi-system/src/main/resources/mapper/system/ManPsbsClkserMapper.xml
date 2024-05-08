@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.man.mapper.ManPsbsClkserMapper">
+    
+    <resultMap type="ManPsbsClkser" id="ManPsbsClkserResult">
+        <result property="clser"    column="clser"    />
+        <result property="clid"    column="clid"    />
+        <result property="stid"    column="stid"    />
+    </resultMap>
+
+    <sql id="selectManPsbsClkserVo">
+        select clser, clid, stid from psbs_clkser
+    </sql>
+
+    <select id="selectManPsbsClkserList" parameterType="ManPsbsClkser" resultMap="ManPsbsClkserResult">
+        <include refid="selectManPsbsClkserVo"/>
+        <where>  
+            <if test="clser != null "> and clser = #{clser}</if>
+            <if test="clid != null "> and clid = #{clid}</if>
+            <if test="stid != null "> and stid = #{stid}</if>
+        </where>
+    </select>
+    
+    <select id="selectManPsbsClkserByClser" parameterType="Long" resultMap="ManPsbsClkserResult">
+        <include refid="selectManPsbsClkserVo"/>
+        where clser = #{clser}
+    </select>
+        
+    <insert id="insertManPsbsClkser" parameterType="ManPsbsClkser" useGeneratedKeys="true" keyProperty="clser">
+        insert into psbs_clkser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clid != null">clid,</if>
+            <if test="stid != null">stid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clid != null">#{clid},</if>
+            <if test="stid != null">#{stid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateManPsbsClkser" parameterType="ManPsbsClkser">
+        update psbs_clkser
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clid != null">clid = #{clid},</if>
+            <if test="stid != null">stid = #{stid},</if>
+        </trim>
+        where clser = #{clser}
+    </update>
+
+    <delete id="deleteManPsbsClkserByClser" parameterType="Long">
+        delete from psbs_clkser where clser = #{clser}
+    </delete>
+
+    <delete id="deleteManPsbsClkserByClsers" parameterType="String">
+        delete from psbs_clkser where clser in 
+        <foreach item="clser" collection="array" open="(" separator="," close=")">
+            #{clser}
+        </foreach>
+    </delete>
+</mapper>
