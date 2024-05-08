@@ -1,15 +1,15 @@
-package com.ruoyi.system.service;
+package com.ruoyi.system.cum.mapper;
 
 import java.util.List;
-import com.ruoyi.system.domain.CumPsbsProblem;
+import com.ruoyi.system.cum.domain.CumPsbsProblem;
 
 /**
- * 问题反馈Service接口
+ * 问题反馈Mapper接口
  * 
  * @author 御泽
  * @date 2024-05-08
  */
-public interface ICumPsbsProblemService 
+public interface CumPsbsProblemMapper 
 {
     /**
      * 查询问题反馈
@@ -44,18 +44,18 @@ public interface ICumPsbsProblemService
     public int updateCumPsbsProblem(CumPsbsProblem cumPsbsProblem);
 
     /**
-     * 批量删除问题反馈
-     * 
-     * @param proids 需要删除的问题反馈主键集合
-     * @return 结果
-     */
-    public int deleteCumPsbsProblemByProids(Long[] proids);
-
-    /**
-     * 删除问题反馈信息
+     * 删除问题反馈
      * 
      * @param proid 问题反馈主键
      * @return 结果
      */
     public int deleteCumPsbsProblemByProid(Long proid);
+
+    /**
+     * 批量删除问题反馈
+     * 
+     * @param proids 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteCumPsbsProblemByProids(Long[] proids);
 }

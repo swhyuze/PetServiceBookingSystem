@@ -1,15 +1,15 @@
-package com.ruoyi.system.mapper;
+package com.ruoyi.system.adm.service;
 
 import java.util.List;
-import com.ruoyi.system.domain.AdmPsbsProblem;
+import com.ruoyi.system.adm.domain.AdmPsbsProblem;
 
 /**
- * 问题反馈Mapper接口
+ * 问题反馈Service接口
  * 
  * @author 御泽
  * @date 2024-05-06
  */
-public interface AdmPsbsProblemMapper 
+public interface IAdmPsbsProblemService 
 {
     /**
      * 查询问题反馈
@@ -44,18 +44,18 @@ public interface AdmPsbsProblemMapper
     public int updateAdmPsbsProblem(AdmPsbsProblem admPsbsProblem);
 
     /**
-     * 删除问题反馈
+     * 批量删除问题反馈
+     * 
+     * @param proids 需要删除的问题反馈主键集合
+     * @return 结果
+     */
+    public int deleteAdmPsbsProblemByProids(Long[] proids);
+
+    /**
+     * 删除问题反馈信息
      * 
      * @param proid 问题反馈主键
      * @return 结果
      */
     public int deleteAdmPsbsProblemByProid(Long proid);
-
-    /**
-     * 批量删除问题反馈
-     * 
-     * @param proids 需要删除的数据主键集合
-     * @return 结果
-     */
-    public int deleteAdmPsbsProblemByProids(Long[] proids);
 }

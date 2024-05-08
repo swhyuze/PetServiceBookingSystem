@@ -1,11 +1,11 @@
-package com.ruoyi.system.service.impl;
+package com.ruoyi.system.cum.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.CumPsbsProblemMapper;
-import com.ruoyi.system.domain.CumPsbsProblem;
-import com.ruoyi.system.service.ICumPsbsProblemService;
+import com.ruoyi.system.cum.mapper.CumPsbsProblemMapper;
+import com.ruoyi.system.cum.domain.CumPsbsProblem;
+import com.ruoyi.system.cum.service.ICumPsbsProblemService;
 
 /**
  * 问题反馈Service业务层处理

@@ -1,11 +1,11 @@
-package com.ruoyi.system.service.impl;
+package com.ruoyi.system.adm.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.AdmPsbsProblemMapper;
-import com.ruoyi.system.domain.AdmPsbsProblem;
-import com.ruoyi.system.service.IAdmPsbsProblemService;
+import com.ruoyi.system.adm.mapper.AdmPsbsProblemMapper;
+import com.ruoyi.system.adm.domain.AdmPsbsProblem;
+import com.ruoyi.system.adm.service.IAdmPsbsProblemService;
 
 /**
  * 问题反馈Service业务层处理

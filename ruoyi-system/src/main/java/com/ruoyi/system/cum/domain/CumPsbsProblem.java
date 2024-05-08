@@ -1,4 +1,4 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.system.cum.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -11,9 +11,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 问题反馈对象 psbs_problem
  * 
  * @author 御泽
- * @date 2024-05-06
+ * @date 2024-05-08
  */
-public class AdmPsbsProblem extends BaseEntity
+public class CumPsbsProblem extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
