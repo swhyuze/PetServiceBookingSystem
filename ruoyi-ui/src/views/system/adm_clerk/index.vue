@@ -27,17 +27,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="上司编号" prop="mid">
+      <el-form-item label="所属店铺" prop="msname">
         <el-input
-          v-model="queryParams.mid"
-          placeholder="请输入上司编号"
+          v-model="queryParams.msname"
+          placeholder="请输入所属店铺"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="登录账号" prop="uid">
+      <el-form-item label="登录账号" prop="uname">
         <el-input
-          v-model="queryParams.uid"
+          v-model="queryParams.user_name"
           placeholder="请输入登录账号"
           clearable
           @keyup.enter.native="handleQuery"
@@ -105,8 +105,8 @@
         </template>
       </el-table-column>
       <el-table-column label="店员电话" align="center" prop="clnum" />
-      <el-table-column label="上司编号" align="center" prop="mid" />
-      <el-table-column label="登录账号" align="center" prop="uid" />
+      <el-table-column label="上司编号" align="center" prop="msname" />
+      <el-table-column label="登录账号" align="center" prop="uname" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

@@ -42,3 +42,4 @@ export function delClk_servicetp(stid) {
     method: 'delete'
   })
 }
+

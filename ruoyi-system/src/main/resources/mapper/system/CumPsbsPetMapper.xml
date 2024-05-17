@@ -11,22 +11,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="psex"    column="psex"    />
         <result property="ptid"    column="ptid"    />
         <result property="ptpic"    column="ptpic"    />
+        <result property="ptname"    column="ptname"    />
+        <result property="cuid"    column="cuid"    />
     </resultMap>
 
     <sql id="selectCumPsbsPetVo">
-        select pid, pname, pps, psex, ptid, ptpic from psbs_pet
+        select pid, pname, pps, psex, ptid, ptpic, cuid from psbs_pet
     </sql>
 
     <select id="selectCumPsbsPetList" parameterType="CumPsbsPet" resultMap="CumPsbsPetResult">
-        <include refid="selectCumPsbsPetVo"/>
-        <where>  
+        SELECT psbs_pet.*,psbs_pettp.ptname FROM psbs_pet
+            LEFT JOIN psbs_pettp ON psbs_pet.ptid=psbs_pettp.ptid
+        <where>
             <if test="pname != null  and pname != ''"> and pname like concat('%', #{pname}, '%')</if>
             <if test="pps != null  and pps != ''"> and pps = #{pps}</if>
             <if test="psex != null "> and psex = #{psex}</if>
             <if test="ptid != null "> and ptid = #{ptid}</if>
+            <if test="cuid != null "> and cuid = #{cuid}</if>
         </where>
     </select>
-    
+
+
     <select id="selectCumPsbsPetByPid" parameterType="Long" resultMap="CumPsbsPetResult">
         <include refid="selectCumPsbsPetVo"/>
         where pid = #{pid}
@@ -40,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="psex != null">psex,</if>
             <if test="ptid != null">ptid,</if>
             <if test="ptpic != null">ptpic,</if>
+            <if test="cuid != null">cuid,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="pname != null and pname != ''">#{pname},</if>
@@ -47,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="psex != null">#{psex},</if>
             <if test="ptid != null">#{ptid},</if>
             <if test="ptpic != null">#{ptpic},</if>
+            <if test="cuid != null">#{cuid},</if>
          </trim>
     </insert>
 
@@ -67,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCumPsbsPetByPids" parameterType="String">
-        delete from psbs_pet where pid in 
+        delete from psbs_pet where pid in
         <foreach item="pid" collection="array" open="(" separator="," close=")">
             #{pid}
         </foreach>

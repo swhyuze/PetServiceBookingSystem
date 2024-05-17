@@ -33,7 +33,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="服务开始时间" prop="serstime">
+      <el-form-item label="开始时间" prop="serstime">
         <el-date-picker clearable
           v-model="queryParams.serstime"
           type="date"
@@ -41,7 +41,7 @@
           placeholder="请选择服务开始时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="服务结束时间" prop="seretime">
+      <el-form-item label="结束时间" prop="seretime">
         <el-date-picker clearable
           v-model="queryParams.seretime"
           type="date"
@@ -90,52 +90,6 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:cum_service:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:cum_service:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:cum_service:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:cum_service:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
 
     <el-table v-loading="loading" :data="cum_serviceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />

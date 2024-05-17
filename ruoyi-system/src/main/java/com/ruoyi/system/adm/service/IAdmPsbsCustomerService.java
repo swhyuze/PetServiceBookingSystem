@@ -19,6 +19,7 @@ public interface IAdmPsbsCustomerService
      */
     public AdmPsbsCustomer selectAdmPsbsCustomerByCuid(Long cuid);
 
+    public AdmPsbsCustomer selectAdmPsbsCustomerByUid(Long uid);
     /**
      * 查询顾客管理列表
      * 

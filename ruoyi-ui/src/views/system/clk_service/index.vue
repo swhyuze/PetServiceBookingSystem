@@ -33,18 +33,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="服务开始时间" prop="serstime">
+      <el-form-item label="开始时间" prop="serstime">
         <el-date-picker clearable
           v-model="queryParams.serstime"
-          type="date"
+          type="datetime"
           value-format="yyyy-MM-dd"
           placeholder="请选择服务开始时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="服务结束时间" prop="seretime">
+      <el-form-item label="结束时间" prop="seretime">
         <el-date-picker clearable
           v-model="queryParams.seretime"
-          type="date"
+          type="datetime"
           value-format="yyyy-MM-dd"
           placeholder="请选择服务结束时间">
         </el-date-picker>
@@ -92,38 +92,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:clk_service:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:clk_service:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:clk_service:remove']"
-        >删除</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="warning"

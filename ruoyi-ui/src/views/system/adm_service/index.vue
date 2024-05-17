@@ -33,7 +33,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="服务开始时间" prop="serstime">
+      <el-form-item label="开始时间" prop="serstime">
         <el-date-picker clearable
           v-model="queryParams.serstime"
           type="date"
@@ -41,7 +41,7 @@
           placeholder="请选择服务开始时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="服务结束时间" prop="seretime">
+      <el-form-item label="结束时间" prop="seretime">
         <el-date-picker clearable
           v-model="queryParams.seretime"
           type="date"
@@ -144,12 +144,12 @@
       <el-table-column label="店员" align="center" prop="clid" />
       <el-table-column label="宠物店" align="center" prop="mid" />
       <el-table-column label="宠物编号" align="center" prop="pid" />
-      <el-table-column label="服务开始时间" align="center" prop="serstime" width="180">
+      <el-table-column label="开始时间" align="center" prop="serstime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.serstime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务结束时间" align="center" prop="seretime" width="180">
+      <el-table-column label="结束时间" align="center" prop="seretime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.seretime, '{y}-{m}-{d}') }}</span>
         </template>

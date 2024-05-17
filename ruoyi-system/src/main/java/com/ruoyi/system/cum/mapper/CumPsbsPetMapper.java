@@ -2,6 +2,7 @@ package com.ruoyi.system.cum.mapper;
 
 import java.util.List;
 import com.ruoyi.system.cum.domain.CumPsbsPet;
+import com.ruoyi.system.adm.domain.AdmPsbsPettp;
 
 /**
  * 宠物管理Mapper接口

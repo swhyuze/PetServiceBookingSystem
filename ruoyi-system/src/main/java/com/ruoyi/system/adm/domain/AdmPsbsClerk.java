@@ -39,6 +39,8 @@ public class AdmPsbsClerk extends BaseEntity
     @Excel(name = "登录账号")
     private Long uid;
 
+    private String uname;
+    private String msname;
     /** 店员服务信息 */
     private List<AdmPsbsClkser> admPsbsClkserList;
 
@@ -106,6 +108,11 @@ public class AdmPsbsClerk extends BaseEntity
     {
         this.admPsbsClkserList = admPsbsClkserList;
     }
+
+    public String getUname(){ return this.uname; }
+    public void setUname(String uname){ this.uname=uname;}
+    public String getMsname(){ return this.msname; }
+    public void setMsname(String msname){ this.msname=msname;}
 
     @Override
     public String toString() {

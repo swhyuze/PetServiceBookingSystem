@@ -1,5 +1,7 @@
 package com.ruoyi.framework.web.service;
 
+import com.ruoyi.system.adm.domain.AdmPsbsCustomer;
+import com.ruoyi.system.adm.mapper.AdmPsbsCustomerMapper;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,9 @@ public class SysRegisterService
 
     @Autowired
     private SysUserRoleMapper userRoleMapper;
+
+    @Autowired
+    private AdmPsbsCustomerMapper customerMapper;
     /**
      * 注册
      */
@@ -89,6 +94,12 @@ public class SysRegisterService
             {
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success")));
                 userRoleMapper.insertUserRoleByUserNameAndRoleId(username, 103L);
+                AdmPsbsCustomer customer = new AdmPsbsCustomer();
+                customer.setCuname(username);
+                customer.setCusex(0L);
+                customer.setCutp(0L);
+                customer.setUid(sysUser.getUserId());
+                customerMapper.insertAdmPsbsCustomer(customer);
             }
         }
         return msg;

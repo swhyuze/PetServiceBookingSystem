@@ -32,7 +32,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectAdmPsbsCustomerVo"/>
         where cuid = #{cuid}
     </select>
-        
+
+    <select id="selectAdmPsbsCustomerByUid" parameterType="Long" resultMap="AdmPsbsCustomerResult">
+        <include refid="selectAdmPsbsCustomerVo"/>
+        where uid = #{uid}
+    </select>
+
     <insert id="insertAdmPsbsCustomer" parameterType="AdmPsbsCustomer" useGeneratedKeys="true" keyProperty="cuid">
         insert into psbs_customer
         <trim prefix="(" suffix=")" suffixOverrides=",">

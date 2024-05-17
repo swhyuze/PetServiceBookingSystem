@@ -42,3 +42,11 @@ export function delAdm_pettp(ptid) {
     method: 'delete'
   })
 }
+
+// 查询所有的宠物品种
+export function selectAdmPsbsPettpAll() {
+  return request({
+    url: '/system/cum_pet/selectAdmPsbsPettpAll',
+    method: 'get',
+  })
+}

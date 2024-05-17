@@ -9,14 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="宠物注意事项" prop="pps">
-        <el-input
-          v-model="queryParams.pps"
-          placeholder="请输入宠物注意事项"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="宠物性别" prop="psex">
         <el-select v-model="queryParams.psex" placeholder="请选择宠物性别" clearable>
           <el-option
@@ -44,52 +36,18 @@
           v-hasPermi="['system:cum_pet:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:cum_pet:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:cum_pet:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:cum_pet:export']"
-        >导出</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="cum_petList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="宠物编号" align="center" prop="pid" />
       <el-table-column label="宠物姓名" align="center" prop="pname" />
-      <el-table-column label="宠物注意事项" align="center" prop="pps" />
+      <el-table-column label="注意事项" align="center" prop="pps" />
       <el-table-column label="宠物性别" align="center" prop="psex">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_pet_sex" :value="scope.row.psex"/>
         </template>
       </el-table-column>
-      <el-table-column label="种类编号" align="center" prop="ptid" />
+      <el-table-column label="品种名称" align="center" prop="ptname" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -124,9 +82,6 @@
         <el-form-item label="宠物姓名" prop="pname">
           <el-input v-model="form.pname" placeholder="请输入宠物姓名" />
         </el-form-item>
-        <el-form-item label="宠物注意事项" prop="pps">
-          <el-input v-model="form.pps" placeholder="请输入宠物注意事项" />
-        </el-form-item>
         <el-form-item label="宠物性别" prop="psex">
           <el-select v-model="form.psex" placeholder="请选择宠物性别">
             <el-option
@@ -136,6 +91,19 @@
               :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="宠物品种" prop="ptid">
+          <el-select v-model="form.ptid" placeholder="请选择宠物品种">
+            <el-option
+              v-for="dict in options"
+              :key="dict.ptid"
+              :label="dict.ptname"
+              :value="parseInt(dict.ptid)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="注意事项" prop="pps">
+          <el-input v-model="form.pps" placeholder="请输入注意事项" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -147,13 +115,14 @@
 </template>
 
 <script>
-import { listCum_pet, getCum_pet, delCum_pet, addCum_pet, updateCum_pet } from "@/api/system/cum_pet";
+import { listCum_pet, getCum_pet, delCum_pet, addCum_pet, updateCum_pet ,selectAdmPsbsPettpAll} from "@/api/system/cum_pet";
 
 export default {
   name: "Cum_pet",
   dicts: ['sys_pet_sex'],
   data() {
     return {
+      options:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -193,8 +162,16 @@ export default {
   },
   created() {
     this.getList();
+    this.selectAdmPsbsPettpAll();
   },
   methods: {
+    /** 下拉菜单 */
+    selectAdmPsbsPettpAll() {
+      selectAdmPsbsPettpAll().then(response => {
+        console.log(response);
+        this.options=response.rows;
+      });
+    },
     /** 查询宠物管理列表 */
     getList() {
       this.loading = true;
@@ -241,11 +218,12 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加宠物管理";
+      this.title = "添加宠物";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
+      this.selectAdmPsbsPettpAll();
       const pid = row.pid || this.ids
       getCum_pet(pid).then(response => {
         this.form = response.data;

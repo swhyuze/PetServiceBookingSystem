@@ -27,14 +27,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="上司编号" prop="mid">
-        <el-input
-          v-model="queryParams.mid"
-          placeholder="请输入上司编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="登录账号" prop="uid">
         <el-input
           v-model="queryParams.uid"
@@ -59,17 +51,6 @@
           @click="handleAdd"
           v-hasPermi="['system:man_clerk:add']"
         >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:man_clerk:edit']"
-        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -105,7 +86,6 @@
         </template>
       </el-table-column>
       <el-table-column label="店员电话" align="center" prop="clnum" />
-      <el-table-column label="上司编号" align="center" prop="mid" />
       <el-table-column label="登录账号" align="center" prop="uid" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -116,13 +96,6 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:man_clerk:edit']"
           >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:man_clerk:remove']"
-          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -165,7 +138,6 @@
         </el-row>
         <el-table :data="manPsbsClkserList" :row-class-name="rowManPsbsClkserIndex" @selection-change="handleManPsbsClkserSelectionChange" ref="manPsbsClkser">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="服务种类编号" prop="stid" width="150">
             <template slot-scope="scope">
               <el-select v-model="scope.row.stid" placeholder="请选择服务种类编号">

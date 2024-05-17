@@ -44,6 +44,17 @@ public class AdmPsbsPettpServiceImpl implements IAdmPsbsPettpService
     }
 
     /**
+     * 查询所有宠物品种
+     *
+     * @return 宠物品种
+     */
+    @Override
+    public List<AdmPsbsPettp> selectAdmPsbsPettpAll()
+    {
+        return admPsbsPettpMapper.selectAdmPsbsPettpAll();
+    }
+
+    /**
      * 新增宠物品种
      * 
      * @param admPsbsPettp 宠物品种

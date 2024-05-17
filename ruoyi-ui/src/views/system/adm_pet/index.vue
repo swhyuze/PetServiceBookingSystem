@@ -9,14 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="宠物宠物备注" prop="pps">
-        <el-input
-          v-model="queryParams.pps"
-          placeholder="请输入宠物宠物备注"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="宠物性别" prop="psex">
         <el-select v-model="queryParams.psex" placeholder="请选择宠物性别" clearable>
           <el-option
@@ -81,9 +73,8 @@
 
     <el-table v-loading="loading" :data="adm_petList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="宠物管理" align="center" prop="pid" />
       <el-table-column label="宠物姓名" align="center" prop="pname" />
-      <el-table-column label="宠物宠物备注" align="center" prop="pps" />
+      <el-table-column label="注意事项" align="center" prop="pps" />
       <el-table-column label="宠物性别" align="center" prop="psex">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_pet_sex" :value="scope.row.psex"/>
@@ -124,8 +115,8 @@
         <el-form-item label="宠物姓名" prop="pname">
           <el-input v-model="form.pname" placeholder="请输入宠物姓名" />
         </el-form-item>
-        <el-form-item label="宠物宠物备注" prop="pps">
-          <el-input v-model="form.pps" placeholder="请输入宠物宠物备注" />
+        <el-form-item label="注意事项" prop="pps">
+          <el-input v-model="form.pps" placeholder="请输入注意事项" />
         </el-form-item>
         <el-form-item label="宠物性别" prop="psex">
           <el-select v-model="form.psex" placeholder="请选择宠物性别">

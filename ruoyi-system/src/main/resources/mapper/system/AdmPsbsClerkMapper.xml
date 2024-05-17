@@ -11,6 +11,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="clnum"    column="clnum"    />
         <result property="mid"    column="mid"    />
         <result property="uid"    column="uid"    />
+        <result property="uname"    column="user_name"    />
+        <result property="msname"    column="msname"    />
     </resultMap>
 
     <resultMap id="AdmPsbsClerkAdmPsbsClkserResult" type="AdmPsbsClerk" extends="AdmPsbsClerkResult">
@@ -28,13 +30,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectAdmPsbsClerkList" parameterType="AdmPsbsClerk" resultMap="AdmPsbsClerkResult">
-        <include refid="selectAdmPsbsClerkVo"/>
+        SELECT psbs_clerk.*,sys_user.user_name,psbs_manager.msname FROM psbs_clerk
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
+        LEFT JOIN psbs_manager ON psbs_manager.mid=psbs_clerk.mid
         <where>  
             <if test="clname != null  and clname != ''"> and clname like concat('%', #{clname}, '%')</if>
             <if test="clsex != null "> and clsex = #{clsex}</if>
-            <if test="clnum != null  and clnum != ''"> and clnum = #{clnum}</if>
-            <if test="mid != null "> and mid like concat('%', #{mid}, '%')</if>
-            <if test="uid != null "> and uid like concat('%', #{uid}, '%')</if>
+            <if test="clnum != null  and clnum != ''"> and clnum like concat('%', #{clnum}, '%')</if>
+            <if test="msname != null "> and msname like concat('%', #{msname}, '%')</if>
+            <if test="uname != null "> and user_name like concat('%', #{uname}, '%')</if>
         </where>
     </select>
     

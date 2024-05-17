@@ -1,18 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="问题回复" prop="prore">
-        <el-input
-          v-model="queryParams.prore"
-          placeholder="请输入问题回复"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="问题上传时间" prop="proutime">
+      <el-form-item label="上传时间" prop="proutime">
         <el-date-picker clearable
           v-model="queryParams.proutime"
-          type="date"
+          type="datetime"
           value-format="yyyy-MM-dd"
           placeholder="请选择问题上传时间">
         </el-date-picker>
@@ -20,18 +12,10 @@
       <el-form-item label="反馈时间" prop="prortime">
         <el-date-picker clearable
           v-model="queryParams.prortime"
-          type="date"
+          type="datetime"
           value-format="yyyy-MM-dd"
           placeholder="请选择反馈时间">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="问题反馈人员账号" prop="uid">
-        <el-input
-          v-model="queryParams.uid"
-          placeholder="请输入问题反馈人员账号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -48,46 +32,13 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:clk_problem:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:clk_problem:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:clk_problem:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:clk_problem:export']"
-        >导出</el-button>
+        >反馈问题</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="clk_problemList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="问题编号" align="center" prop="proid" />
       <el-table-column label="问题描述" align="center" prop="protext" />
       <el-table-column label="问题回复" align="center" prop="prore" />
       <el-table-column label="问题上传时间" align="center" prop="proutime" width="180">
@@ -100,7 +51,6 @@
           <span>{{ parseTime(scope.row.prortime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="问题反馈人员账号" align="center" prop="uid" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -109,14 +59,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:clk_problem:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:clk_problem:remove']"
-          >删除</el-button>
+          >查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -129,16 +72,31 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改问题反馈对话框 -->
+    <!-- 添加问题反馈对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="问题描述">
-          <editor v-model="form.protext" :min-height="192"/>
+          <el-input v-model="form.protext" :min-height="192"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 查看问题反馈对话框 -->
+    <el-dialog :title="title" :visible.sync="look" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="问题描述">
+          <el-input v-model="form.protext" :min-height="192" :disabled="true"/>
+        </el-form-item>
+        <el-form-item label="问题回复">
+          <el-input v-model="form.prore" :min-height="192" :disabled="true"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel2">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -169,6 +127,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      look: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -202,6 +161,10 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.reset();
+    },
+    cancel2() {
+      this.look = false;
       this.reset();
     },
     // 表单重置
@@ -244,8 +207,8 @@ export default {
       const proid = row.proid || this.ids
       getClk_problem(proid).then(response => {
         this.form = response.data;
-        this.open = true;
-        this.title = "修改问题反馈";
+        this.look = true;
+        this.title = "查看问题反馈";
       });
     },
     /** 提交按钮 */

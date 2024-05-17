@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+// 下拉内容
+export function selectAdmPsbsPettpAll() {
+  return request({
+    url: '/system/cum_pet/selectAdmPsbsPettpAll',
+    method: 'get',
+  })
+}
+
 // 查询宠物管理列表
 export function listCum_pet(query) {
   return request({

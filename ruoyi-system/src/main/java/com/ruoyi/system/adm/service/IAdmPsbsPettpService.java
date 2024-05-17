@@ -28,6 +28,13 @@ public interface IAdmPsbsPettpService
     public List<AdmPsbsPettp> selectAdmPsbsPettpList(AdmPsbsPettp admPsbsPettp);
 
     /**
+     * 查询宠物品种所有
+     *
+     * @param null 宠物品种
+     * @return 宠物品种集合
+     */
+    public List<AdmPsbsPettp> selectAdmPsbsPettpAll();
+    /**
      * 新增宠物品种
      * 
      * @param admPsbsPettp 宠物品种

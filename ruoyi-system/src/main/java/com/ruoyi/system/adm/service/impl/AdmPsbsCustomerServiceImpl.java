@@ -31,6 +31,10 @@ public class AdmPsbsCustomerServiceImpl implements IAdmPsbsCustomerService
         return admPsbsCustomerMapper.selectAdmPsbsCustomerByCuid(cuid);
     }
 
+    @Override
+    public AdmPsbsCustomer selectAdmPsbsCustomerByUid(Long uid){
+        return admPsbsCustomerMapper.selectAdmPsbsCustomerByUid(uid);
+    }
     /**
      * 查询顾客管理列表
      * 

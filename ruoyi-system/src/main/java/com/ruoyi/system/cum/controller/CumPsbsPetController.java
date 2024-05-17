@@ -2,6 +2,11 @@ package com.ruoyi.system.cum.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.adm.domain.AdmPsbsPettp;
+import com.ruoyi.system.adm.service.IAdmPsbsCustomerService;
+import com.ruoyi.system.adm.service.IAdmPsbsPettpService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +38,10 @@ public class CumPsbsPetController extends BaseController
 {
     @Autowired
     private ICumPsbsPetService cumPsbsPetService;
-
+    @Autowired
+    private IAdmPsbsPettpService admPsbsPettpService;
+    @Autowired
+    private IAdmPsbsCustomerService admPsbsCustomerService;
     /**
      * 查询宠物管理列表
      */
@@ -42,6 +50,7 @@ public class CumPsbsPetController extends BaseController
     public TableDataInfo list(CumPsbsPet cumPsbsPet)
     {
         startPage();
+        cumPsbsPet.setCuid(admPsbsCustomerService.selectAdmPsbsCustomerByUid(SecurityUtils.getUserId()).getCuid());
         List<CumPsbsPet> list = cumPsbsPetService.selectCumPsbsPetList(cumPsbsPet);
         return getDataTable(list);
     }
@@ -77,6 +86,8 @@ public class CumPsbsPetController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody CumPsbsPet cumPsbsPet)
     {
+        cumPsbsPet.setCuid(admPsbsCustomerService.selectAdmPsbsCustomerByUid(SecurityUtils.getUserId()).getCuid());
+
         return toAjax(cumPsbsPetService.insertCumPsbsPet(cumPsbsPet));
     }
 
@@ -100,5 +111,15 @@ public class CumPsbsPetController extends BaseController
     public AjaxResult remove(@PathVariable Long[] pids)
     {
         return toAjax(cumPsbsPetService.deleteCumPsbsPetByPids(pids));
+    }
+
+    /**
+     * 查询所有宠物种类列表
+     */
+    @GetMapping("/selectAdmPsbsPettpAll")
+    public TableDataInfo selectAdmPsbsPettpAll()
+    {
+        List<AdmPsbsPettp> list = admPsbsPettpService.selectAdmPsbsPettpAll();
+        return getDataTable(list);
     }
 }

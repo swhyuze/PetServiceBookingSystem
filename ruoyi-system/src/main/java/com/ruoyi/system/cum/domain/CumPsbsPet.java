@@ -33,10 +33,12 @@ public class CumPsbsPet extends BaseEntity
     /** 种类编号 */
     @Excel(name = "种类编号")
     private Long ptid;
-
+    /** 种类名称 */
+    private String ptname;
+    /** 主人编号 */
+    private Long cuid;
     /** 宠物照片 */
     private String ptpic;
-
     public void setPid(Long pid) 
     {
         this.pid = pid;
@@ -91,6 +93,20 @@ public class CumPsbsPet extends BaseEntity
     {
         return ptpic;
     }
+
+    public void setPtname(String ptname)
+    {
+        this.ptname = ptname;
+    }
+
+    public String getPtname()
+    {
+        return ptname;
+    }
+
+    public Long getCuid() { return cuid; }
+
+    public void setCuid(Long cuid) {this.cuid = cuid;}
 
     @Override
     public String toString() {

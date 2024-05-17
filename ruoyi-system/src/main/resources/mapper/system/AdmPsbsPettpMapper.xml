@@ -21,7 +21,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptps != null  and ptps != ''"> and ptps like concat('%', #{ptps}, '%')</if>
         </where>
     </select>
-    
+
+    <select id="selectAdmPsbsPettpAll" parameterType="AdmPsbsPettp" resultMap="AdmPsbsPettpResult">
+        <include refid="selectAdmPsbsPettpVo"/>
+    </select>
+
     <select id="selectAdmPsbsPettpByPtid" parameterType="Long" resultMap="AdmPsbsPettpResult">
         <include refid="selectAdmPsbsPettpVo"/>
         where ptid = #{ptid}
