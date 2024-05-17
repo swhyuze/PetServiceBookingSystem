@@ -43,6 +43,10 @@ public class AdmPsbsManagerServiceImpl implements IAdmPsbsManagerService
         return admPsbsManagerMapper.selectAdmPsbsManagerList(admPsbsManager);
     }
 
+    public List<AdmPsbsManager> selectAllAdmManager()
+    {
+        return admPsbsManagerMapper.selectAllAdmManager();
+    }
     /**
      * 新增宠物店管理
      * 

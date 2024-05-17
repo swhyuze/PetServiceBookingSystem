@@ -90,4 +90,9 @@ public class AdmPsbsServicetpServiceImpl implements IAdmPsbsServicetpService
     {
         return admPsbsServicetpMapper.deleteAdmPsbsServicetpByStid(stid);
     }
+
+    @Override
+    public List<AdmPsbsServicetp> selectAllAdmServicetp(){
+        return admPsbsServicetpMapper.selectAllAdmServicetp();
+    }
 }

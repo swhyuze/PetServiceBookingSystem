@@ -42,3 +42,11 @@ export function delAdm_manager(mid) {
     method: 'delete'
   })
 }
+
+// 查询所有的宠物店铺
+export function selectAllAdmManager() {
+  return request({
+    url: '/system/adm_manager/selectAllAdmManager',
+    method: 'get',
+  })
+}

@@ -42,3 +42,11 @@ export function delAdm_servicetp(stid) {
     method: 'delete'
   })
 }
+
+// 查询所有的服务
+export function selectAllAdmServicetp() {
+  return request({
+    url: '/system/adm_servicetp/selectAllAdmServicetp',
+    method: 'get',
+  })
+}

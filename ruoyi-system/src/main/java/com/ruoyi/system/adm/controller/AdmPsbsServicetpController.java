@@ -101,4 +101,11 @@ public class AdmPsbsServicetpController extends BaseController
     {
         return toAjax(admPsbsServicetpService.deleteAdmPsbsServicetpByStids(stids));
     }
+
+    @GetMapping("/selectAllAdmServicetp")
+    public TableDataInfo list()
+    {
+        List<AdmPsbsServicetp> list = admPsbsServicetpService.selectAllAdmServicetp();
+        return getDataTable(list);
+    }
 }

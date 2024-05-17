@@ -58,4 +58,6 @@ public interface AdmPsbsServicetpMapper
      * @return 结果
      */
     public int deleteAdmPsbsServicetpByStids(Long[] stids);
+
+    public List<AdmPsbsServicetp> selectAllAdmServicetp();
 }

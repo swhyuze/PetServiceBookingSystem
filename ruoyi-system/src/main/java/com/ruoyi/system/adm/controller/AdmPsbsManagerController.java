@@ -101,4 +101,14 @@ public class AdmPsbsManagerController extends BaseController
     {
         return toAjax(admPsbsManagerService.deleteAdmPsbsManagerByMids(mids));
     }
+
+    /**
+     * 所有的宠物店列表
+     */
+    @GetMapping("/selectAllAdmManager")
+    public TableDataInfo selectAllAdmManager()
+    {
+        List<AdmPsbsManager> list = admPsbsManagerService.selectAllAdmManager();
+        return getDataTable(list);
+    }
 }

@@ -27,22 +27,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="所属店铺" prop="msname">
-        <el-input
-          v-model="queryParams.msname"
-          placeholder="请输入所属店铺"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="登录账号" prop="uname">
-        <el-input
-          v-model="queryParams.user_name"
-          placeholder="请输入登录账号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      <el-form-item label="所属店铺" prop="mid">
+          <el-select v-model="form.mid" placeholder="请选择所属店铺">
+            <el-option
+              v-for="dict in options1"
+              :key="dict.mid"
+              :label="dict.msname"
+              :value="parseInt(dict.mid)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -105,7 +99,7 @@
         </template>
       </el-table-column>
       <el-table-column label="店员电话" align="center" prop="clnum" />
-      <el-table-column label="上司编号" align="center" prop="msname" />
+      <el-table-column label="所属店铺" align="center" prop="msname" />
       <el-table-column label="登录账号" align="center" prop="uname" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -151,13 +145,23 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="登录账号" prop="uid">
+          <el-input v-model="form.uid" placeholder="请输入登录账号" />
+        </el-form-item>
         <el-form-item label="店员电话" prop="clnum">
           <el-input v-model="form.clnum" placeholder="请输入店员电话" />
         </el-form-item>
-        <el-form-item label="上司编号" prop="mid">
-          <el-input v-model="form.mid" placeholder="请输入上司编号" />
+        <el-form-item label="所属店铺" prop="mid">
+          <el-select v-model="form.mid" placeholder="请选择所属店铺">
+            <el-option
+              v-for="dict in options1"
+              :key="dict.mid"
+              :label="dict.msname"
+              :value="parseInt(dict.mid)"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-divider content-position="center">店员服务信息</el-divider>
+        <el-divider content-position="center">店员资质信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddAdmPsbsClkser">添加</el-button>
@@ -168,13 +172,15 @@
         </el-row>
         <el-table :data="admPsbsClkserList" :row-class-name="rowAdmPsbsClkserIndex" @selection-change="handleAdmPsbsClkserSelectionChange" ref="admPsbsClkser">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" align="center" prop="index" width="50"/>
-          <el-table-column label="服务种类编号" prop="stid" width="150">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.stid" placeholder="请选择服务种类编号">
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
-            </template>
+          <el-table-column label="服务种类名称" prop="stid" width="150">
+            <el-select v-model="form.stid" placeholder="请选择服务种类">
+              <el-option
+                v-for="dict in options2"
+                :key="dict.stid"
+                :label="dict.stname"
+                :value="parseInt(dict.stid)"
+              ></el-option>
+            </el-select>
           </el-table-column>
         </el-table>
       </el-form>
@@ -188,12 +194,15 @@
 
 <script>
 import { listAdm_clerk, getAdm_clerk, delAdm_clerk, addAdm_clerk, updateAdm_clerk } from "@/api/system/adm_clerk";
-
+import { selectAllAdmManager } from "@/api/system/adm_manager";
+import { selectAllAdmServicetp } from "@/api/system/adm_servicetp";
 export default {
   name: "Adm_clerk",
   dicts: ['sys_user_sex'],
   data() {
     return {
+      options1:[],
+      options2:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -237,15 +246,32 @@ export default {
           { required: true, message: "店员姓名不能为空", trigger: "blur" }
         ],
         mid: [
-          { required: true, message: "上司编号不能为空", trigger: "blur" }
+          { required: true, message: "所属店铺不能为空", trigger: "blur" }
+        ],
+        uid: [
+          { required: true, message: "登录账号不能为空", trigger: "blur" }
         ],
       }
     };
   },
   created() {
     this.getList();
+    this.selectAllAdmManager();
+    this.selectAllAdmServicetp();
   },
   methods: {
+    selectAllAdmManager(){
+      selectAllAdmManager().then(response => {
+        console.log(response);
+        this.options1=response.rows;
+      });
+    },
+    selectAllAdmServicetp(){
+      selectAllAdmServicetp().then(response => {
+        console.log(response);
+        this.options2=response.rows;
+      });
+    },
     /** 查询店员管理列表 */
     getList() {
       this.loading = true;
@@ -345,12 +371,13 @@ export default {
     handleAddAdmPsbsClkser() {
       let obj = {};
       obj.stid = "";
+      obj.stname = "";
       this.admPsbsClkserList.push(obj);
     },
     /** 店员服务删除按钮操作 */
     handleDeleteAdmPsbsClkser() {
       if (this.checkedAdmPsbsClkser.length == 0) {
-        this.$modal.msgError("请先选择要删除的店员服务数据");
+        this.$modal.msgError("请先选择要删除的服务资质");
       } else {
         const admPsbsClkserList = this.admPsbsClkserList;
         const checkedAdmPsbsClkser = this.checkedAdmPsbsClkser;

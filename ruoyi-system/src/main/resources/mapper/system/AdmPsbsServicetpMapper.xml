@@ -68,4 +68,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{stid}
         </foreach>
     </delete>
+
+    <select id="selectAllAdmServicetp" parameterType="AdmPsbsServicetp" resultMap="AdmPsbsServicetpResult">
+        select * from psbs_servicetp
+    </select>
 </mapper>

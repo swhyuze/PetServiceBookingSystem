@@ -30,6 +30,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="uid != null "> and uid = #{uid}</if>
         </where>
     </select>
+
+    <select id="selectAllAdmManager" parameterType="AdmPsbsManager" resultMap="AdmPsbsManagerResult">
+        select * from psbs_manager
+    </select>
     
     <select id="selectAdmPsbsManagerByMid" parameterType="Long" resultMap="AdmPsbsManagerResult">
         <include refid="selectAdmPsbsManagerVo"/>

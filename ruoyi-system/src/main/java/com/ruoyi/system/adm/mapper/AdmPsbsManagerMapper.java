@@ -26,6 +26,7 @@ public interface AdmPsbsManagerMapper
      * @return 宠物店管理集合
      */
     public List<AdmPsbsManager> selectAdmPsbsManagerList(AdmPsbsManager admPsbsManager);
+    public List<AdmPsbsManager> selectAllAdmManager();
 
     /**
      * 新增宠物店管理
