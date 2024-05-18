@@ -27,7 +27,26 @@ public class AdmPsbsClkser extends BaseEntity
     @Excel(name = "服务种类编号")
     private Long stid;
 
-    public void setClser(Long clser) 
+    private String clname;
+    private String stname;
+
+    public String getClname() {
+        return clname;
+    }
+
+    public void setClname(String clname) {
+        this.clname = clname;
+    }
+
+    public String getStname() {
+        return stname;
+    }
+
+    public void setStname(String stname) {
+        this.stname = stname;
+    }
+
+    public void setClser(Long clser)
     {
         this.clser = clser;
     }

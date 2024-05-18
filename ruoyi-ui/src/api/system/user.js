@@ -133,3 +133,10 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+export function selectAllUserUngive() {
+  return request({
+    url: '/system/user/selectAllUserUngive',
+    method: 'get'
+  })
+}

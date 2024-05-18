@@ -541,4 +541,8 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
+
+    public List<SysUser> selectAllUserUngive(){
+        return userMapper.selectAllUserUngive();
+    }
 }

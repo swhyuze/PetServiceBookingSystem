@@ -146,7 +146,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="登录账号" prop="uid">
-          <el-input v-model="form.uid" placeholder="请输入登录账号" />
+          <el-select v-model="form.uid" placeholder="请选择登录账号">
+            <el-option
+              v-for="dict in options3"
+              :key="dict.userId"
+              :label="dict.userName"
+              :value="parseInt(dict.userId)"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="店员电话" prop="clnum">
           <el-input v-model="form.clnum" placeholder="请输入店员电话" />
@@ -172,15 +179,17 @@
         </el-row>
         <el-table :data="admPsbsClkserList" :row-class-name="rowAdmPsbsClkserIndex" @selection-change="handleAdmPsbsClkserSelectionChange" ref="admPsbsClkser">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="服务种类名称" prop="stid" width="150">
-            <el-select v-model="form.stid" placeholder="请选择服务种类">
-              <el-option
-                v-for="dict in options2"
-                :key="dict.stid"
-                :label="dict.stname"
-                :value="parseInt(dict.stid)"
-              ></el-option>
-            </el-select>
+          <el-table-column label="服务种类名称" prop="stid" width="450">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.stid" placeholder="请选择服务种类">
+                <el-option
+                  v-for="dict in options2"
+                  :key="dict.stid"
+                  :label="dict.stname"
+                  :value="parseInt(dict.stid)"
+                ></el-option>
+              </el-select>
+            </template>
           </el-table-column>
         </el-table>
       </el-form>
@@ -196,6 +205,8 @@
 import { listAdm_clerk, getAdm_clerk, delAdm_clerk, addAdm_clerk, updateAdm_clerk } from "@/api/system/adm_clerk";
 import { selectAllAdmManager } from "@/api/system/adm_manager";
 import { selectAllAdmServicetp } from "@/api/system/adm_servicetp";
+import { selectAllUserUngive } from "@/api/system/user";
+
 export default {
   name: "Adm_clerk",
   dicts: ['sys_user_sex'],
@@ -203,6 +214,7 @@ export default {
     return {
       options1:[],
       options2:[],
+      options3:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -258,6 +270,7 @@ export default {
     this.getList();
     this.selectAllAdmManager();
     this.selectAllAdmServicetp();
+    this.selectAllUserUngive();
   },
   methods: {
     selectAllAdmManager(){
@@ -270,6 +283,12 @@ export default {
       selectAllAdmServicetp().then(response => {
         console.log(response);
         this.options2=response.rows;
+      });
+    },
+    selectAllUserUngive(){
+      selectAllUserUngive().then(response => {
+        console.log(response);
+        this.options3=response.rows;
       });
     },
     /** 查询店员管理列表 */
@@ -371,7 +390,6 @@ export default {
     handleAddAdmPsbsClkser() {
       let obj = {};
       obj.stid = "";
-      obj.stname = "";
       this.admPsbsClkserList.push(obj);
     },
     /** 店员服务删除按钮操作 */

@@ -248,4 +248,13 @@ public class SysUserController extends BaseController
     {
         return success(deptService.selectDeptTreeList(dept));
     }
+
+
+    @GetMapping("/selectAllUserUngive")
+    public TableDataInfo selectAllUserUngive()
+    {
+        List<SysUser> list = userService.selectAllUserUngive();
+        return getDataTable(list);
+    }
+
 }
