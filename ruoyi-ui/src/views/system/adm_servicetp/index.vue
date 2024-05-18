@@ -87,7 +87,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="adm_servicetpList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="adm_servicetpList" @selection-change="handleSelectionChange" height="250">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="服务种类编号" align="center" prop="stid" />
       <el-table-column label="服务名称" align="center" prop="stname" />

@@ -41,8 +41,17 @@ public class AdmPsbsProblem extends BaseEntity
     /** 问题反馈人员账号 */
     @Excel(name = "问题反馈人员账号")
     private Long uid;
+    private String uname;
 
-    public void setProid(Long proid) 
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public void setProid(Long proid)
     {
         this.proid = proid;
     }

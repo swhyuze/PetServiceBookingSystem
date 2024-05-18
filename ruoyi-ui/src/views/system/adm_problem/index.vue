@@ -1,52 +1,22 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="上传时间" prop="proutime">
-        <el-date-picker clearable
-          v-model="queryParams.proutime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择问题上传时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="回复时间" prop="prortime">
-        <el-date-picker clearable
-          v-model="queryParams.prortime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择回复时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="反馈人员" prop="uid">
-        <el-input
-          v-model="queryParams.uid"
-          placeholder="请输入问题反馈人员账号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
 
     <el-table v-loading="loading" :data="adm_problemList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="问题编号" align="center" prop="proid" />
-      <el-table-column label="问题描述" align="center" prop="protext" />
-      <el-table-column label="问题回复" align="center" prop="prore" />
+      <el-table-column label="问题描述" align="center" prop="protext" :show-overflow-tooltip='true' />
+      <el-table-column label="问题回复" align="center" prop="prore" :show-overflow-tooltip='true'/>
       <el-table-column label="上传时间" align="center" prop="proutime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.proutime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.proutime, '{y}-{m}-{d} ') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="反馈时间" align="center" prop="prortime" width="180">
+      <el-table-column label="回复时间" align="center" prop="prortime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.prortime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="问题反馈人员账号" align="center" prop="uid" />
+      <el-table-column label="上传账号" align="center" prop="uname" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -77,9 +47,9 @@
         <el-form-item label="上传时间" prop="proutime" :disabled="true">
           <el-date-picker clearable
             v-model="form.proutime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择问题上传时间">
+            type="datetime"
+            placeholder="请选择问题上传时间"
+            disabled="true">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="问题回复" prop="prore">

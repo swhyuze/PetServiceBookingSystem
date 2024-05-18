@@ -1,5 +1,6 @@
 package com.ruoyi.system.adm.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -88,6 +89,8 @@ public class AdmPsbsProblemController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody AdmPsbsProblem admPsbsProblem)
     {
+        Date nowtime=new Date(System.currentTimeMillis());
+        admPsbsProblem.setPrortime(nowtime);
         return toAjax(admPsbsProblemService.updateAdmPsbsProblem(admPsbsProblem));
     }
 

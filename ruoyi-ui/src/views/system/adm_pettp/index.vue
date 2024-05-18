@@ -28,17 +28,6 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:adm_pettp:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="danger"
           plain
           icon="el-icon-delete"
@@ -48,24 +37,14 @@
           v-hasPermi="['system:adm_pettp:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:adm_pettp:export']"
-        >导出</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="adm_pettpList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="adm_pettpList" @selection-change="handleSelectionChange" >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="品种编号" align="center" prop="ptid" />
       <el-table-column label="品种名" align="center" prop="ptname" />
-      <el-table-column label="品种介绍" align="center" prop="ptps" />
+      <el-table-column label="品种介绍" align="center" prop="ptps" :show-overflow-tooltip='true' />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -101,7 +80,7 @@
           <el-input v-model="form.ptname" placeholder="请输入品种名" />
         </el-form-item>
         <el-form-item label="品种介绍">
-          <editor v-model="form.ptps" :min-height="192"/>
+          <el-input v-model="form.ptps" type="textarea"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
