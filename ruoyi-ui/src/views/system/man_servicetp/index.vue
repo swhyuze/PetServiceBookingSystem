@@ -29,9 +29,8 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-view"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:man_servicetp:edit']"
           >查看</el-button>
         </template>
       </el-table-column>
@@ -48,9 +47,27 @@
     <!-- 添加或修改服务种类对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="服务名称" prop="stname">
+          <el-input v-model="form.stname" placeholder="请输入服务名称" :disabled="true"/>
+        </el-form-item>
+        <el-form-item label="服务价格" prop="stmoney">
+          <el-input v-model="form.stmoney" placeholder="请输入服务价格" :disabled="true"/>
+        </el-form-item>
+        <el-form-item label="收费方式" prop="stmtp">
+          <el-select v-model="form.stmtp" placeholder="请选择收费方式" :disabled="true">
+            <el-option
+              v-for="dict in dict.type.sys_shoufei"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务描述" prop="stps">
+          <el-input v-model="form.stps" placeholder="请输入服务描述" :disabled="true" type="textarea"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>

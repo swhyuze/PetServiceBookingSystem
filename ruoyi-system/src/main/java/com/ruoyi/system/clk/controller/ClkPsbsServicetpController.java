@@ -2,6 +2,8 @@ package com.ruoyi.system.clk.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +43,7 @@ public class ClkPsbsServicetpController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ClkPsbsServicetp clkPsbsServicetp)
     {
+        clkPsbsServicetp.setUid(SecurityUtils.getUserId());
         startPage();
         List<ClkPsbsServicetp> list = clkPsbsServicetpService.selectClkPsbsServicetpList(clkPsbsServicetp);
         return getDataTable(list);

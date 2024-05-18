@@ -4,7 +4,7 @@
       <el-form-item label="上传时间" prop="proutime">
         <el-date-picker clearable
           v-model="queryParams.proutime"
-          type="datetime"
+          type="date"
           value-format="yyyy-MM-dd"
           placeholder="请选择问题上传时间">
         </el-date-picker>
@@ -12,7 +12,7 @@
       <el-form-item label="反馈时间" prop="prortime">
         <el-date-picker clearable
           v-model="queryParams.prortime"
-          type="datetime"
+          type="date"
           value-format="yyyy-MM-dd"
           placeholder="请选择反馈时间">
         </el-date-picker>
@@ -32,16 +32,17 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:clk_problem:add']"
-        >反馈问题</el-button>
+        >反馈</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="clk_problemList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="问题编号" align="center" prop="proid" />
       <el-table-column label="问题描述" align="center" prop="protext" />
       <el-table-column label="问题回复" align="center" prop="prore" />
-      <el-table-column label="问题上传时间" align="center" prop="proutime" width="180">
+      <el-table-column label="上传时间" align="center" prop="proutime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.proutime, '{y}-{m}-{d}') }}</span>
         </template>
@@ -56,9 +57,8 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-view"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:clk_problem:edit']"
           >查看</el-button>
         </template>
       </el-table-column>
@@ -93,6 +93,36 @@
         </el-form-item>
         <el-form-item label="问题回复">
           <el-input v-model="form.prore" :min-height="192" :disabled="true"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel2">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="look" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="问题描述">
+          <el-input v-model="form.protext" type="textarea" :min-height="192" :disabled="true"/>
+        </el-form-item>
+        <el-form-item label="上传时间" prop="proutime" :disabled="true">
+          <el-date-picker clearable
+            v-model="form.proutime"
+            type="datetime"
+            placeholder="请选择问题上传时间"
+            disabled="true">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="问题回复" prop="prore">
+          <el-input v-model="form.prore" :disabled="true"/>
+        </el-form-item>
+        <el-form-item label="上传时间" prop="prortime" :disabled="true">
+          <el-date-picker clearable
+            v-model="form.proutime"
+            type="datetime"
+            placeholder="尚未回复"
+            disabled="true">
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

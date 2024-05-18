@@ -17,11 +17,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectClkPsbsServicetpList" parameterType="ClkPsbsServicetp" resultMap="ClkPsbsServicetpResult">
-        <include refid="selectClkPsbsServicetpVo"/>
+        SELECT psbs_servicetp.*,psbs_clerk.uid FROM psbs_clkser
+        LEFT JOIN psbs_clerk ON psbs_clerk.clid=psbs_clkser.clid
+        LEFT JOIN psbs_servicetp ON psbs_servicetp.stid=psbs_clkser.stid
         <where>  
             <if test="stname != null  and stname != ''"> and stname like concat('%', #{stname}, '%')</if>
             <if test="params.beginStmoney != null and params.beginStmoney != '' and params.endStmoney != null and params.endStmoney != ''"> and stmoney between #{params.beginStmoney} and #{params.endStmoney}</if>
             <if test="stps != null  and stps != ''"> and stps like concat('%', #{stps}, '%')</if>
+            <if test="uid != null  and uid != ''"> and uid = #{uid}</if>
         </where>
     </select>
     

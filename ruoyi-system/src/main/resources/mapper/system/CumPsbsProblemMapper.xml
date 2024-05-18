@@ -18,7 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectCumPsbsProblemList" parameterType="CumPsbsProblem" resultMap="CumPsbsProblemResult">
-        <include refid="selectCumPsbsProblemVo"/>
+        SELECT psbs_problem.*,sys_user.user_name as uname FROM psbs_problem
+        LEFT JOIN sys_user ON psbs_problem.uid=sys_user.user_id
         <where>  
             <if test="protext != null  and protext != ''"> and protext = #{protext}</if>
             <if test="prore != null  and prore != ''"> and prore = #{prore}</if>

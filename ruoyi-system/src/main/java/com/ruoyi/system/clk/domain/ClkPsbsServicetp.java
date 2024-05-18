@@ -32,7 +32,17 @@ public class ClkPsbsServicetp extends BaseEntity
     /** 服务描述 */
     private String stps;
 
-    public void setStid(Long stid) 
+    private Long uid;
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
+    public void setStid(Long stid)
     {
         this.stid = stid;
     }

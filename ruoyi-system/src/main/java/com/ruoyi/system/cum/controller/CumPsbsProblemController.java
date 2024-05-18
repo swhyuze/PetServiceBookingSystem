@@ -1,7 +1,10 @@
 package com.ruoyi.system.cum.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +44,7 @@ public class CumPsbsProblemController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(CumPsbsProblem cumPsbsProblem)
     {
+        cumPsbsProblem.setUid(SecurityUtils.getUserId());
         startPage();
         List<CumPsbsProblem> list = cumPsbsProblemService.selectCumPsbsProblemList(cumPsbsProblem);
         return getDataTable(list);
@@ -77,6 +81,9 @@ public class CumPsbsProblemController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody CumPsbsProblem cumPsbsProblem)
     {
+        cumPsbsProblem.setUid(SecurityUtils.getUserId());
+        Date nowtime=new Date(System.currentTimeMillis());
+        cumPsbsProblem.setProutime(nowtime);
         return toAjax(cumPsbsProblemService.insertCumPsbsProblem(cumPsbsProblem));
     }
 

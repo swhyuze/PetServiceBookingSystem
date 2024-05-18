@@ -29,13 +29,13 @@ public class AdmPsbsProblem extends BaseEntity
     private String prore;
 
     /** 问题上传时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "问题上传时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "问题上传时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date proutime;
 
     /** 反馈时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "反馈时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "反馈时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date prortime;
 
     /** 问题反馈人员账号 */

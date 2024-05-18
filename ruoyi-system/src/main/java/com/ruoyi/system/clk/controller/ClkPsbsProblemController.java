@@ -1,7 +1,10 @@
 package com.ruoyi.system.clk.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +45,7 @@ public class ClkPsbsProblemController extends BaseController
     public TableDataInfo list(ClkPsbsProblem clkPsbsProblem)
     {
         startPage();
+        clkPsbsProblem.setUid(SecurityUtils.getUserId());
         List<ClkPsbsProblem> list = clkPsbsProblemService.selectClkPsbsProblemList(clkPsbsProblem);
         return getDataTable(list);
     }
@@ -77,6 +81,9 @@ public class ClkPsbsProblemController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ClkPsbsProblem clkPsbsProblem)
     {
+        clkPsbsProblem.setUid(SecurityUtils.getUserId());
+        Date nowtime=new Date(System.currentTimeMillis());
+        clkPsbsProblem.setProutime(nowtime);
         return toAjax(clkPsbsProblemService.insertClkPsbsProblem(clkPsbsProblem));
     }
 
