@@ -19,24 +19,22 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="店员电话" prop="clnum">
+      <el-form-item label="登录账号" prop="uname">
         <el-input
-          v-model="queryParams.clnum"
-          placeholder="请输入店员电话"
+          v-model="queryParams.uname"
+          placeholder="请输入店员登录账号"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="所属店铺" prop="mid">
-          <el-select v-model="form.mid" placeholder="请选择所属店铺">
-            <el-option
-              v-for="dict in options1"
-              :key="dict.mid"
-              :label="dict.msname"
-              :value="parseInt(dict.mid)"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+      <el-form-item label="所属店铺" prop="msname">
+        <el-input
+          v-model="queryParams.msname"
+          placeholder="请输入所属店铺"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -129,12 +127,9 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改店员管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <!-- 修改店员管理对话框 -->
+    <el-dialog :title="title" :visible.sync="look" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="店员姓名" prop="clname">
-          <el-input v-model="form.clname" placeholder="请输入店员姓名" />
-        </el-form-item>
         <el-form-item label="店员性别" prop="clsex">
           <el-select v-model="form.clsex" placeholder="请选择店员性别">
             <el-option
@@ -157,6 +152,60 @@
         </el-form-item>
         <el-form-item label="店员电话" prop="clnum">
           <el-input v-model="form.clnum" placeholder="请输入店员电话" />
+        </el-form-item>
+        <el-form-item label="所属店铺" prop="mid">
+          <el-select v-model="form.mid" placeholder="请选择所属店铺">
+            <el-option
+              v-for="dict in options1"
+              :key="dict.mid"
+              :label="dict.msname"
+              :value="parseInt(dict.mid)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-divider content-position="center">店员资质信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddAdmPsbsClkser">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteAdmPsbsClkser">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="admPsbsClkserList" :row-class-name="rowAdmPsbsClkserIndex" @selection-change="handleAdmPsbsClkserSelectionChange" ref="admPsbsClkser">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="服务种类名称" prop="stid" width="450">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.stid" placeholder="请选择服务种类">
+                <el-option
+                  v-for="dict in options2"
+                  :key="dict.stid"
+                  :label="dict.stname"
+                  :value="parseInt(dict.stid)"
+                ></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 增加店员管理对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="登录账号" prop="uid">
+          <el-select v-model="form.uid" placeholder="请选择登录账号">
+            <el-option
+              v-for="dict in options3"
+              :key="dict.userId"
+              :label="dict.userName"
+              :value="parseInt(dict.userId)"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="所属店铺" prop="mid">
           <el-select v-model="form.mid" placeholder="请选择所属店铺">
@@ -237,15 +286,16 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      look: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        clname: null,
-        clsex: null,
-        clnum: null,
-        mid: null,
-        uid: null
+        clid:null,
+        clname:null,
+        msname:null,
+        clsex:null,
+        uname:null
       },
       // 表单参数
       form: {},
@@ -275,19 +325,16 @@ export default {
   methods: {
     selectAllAdmManager(){
       selectAllAdmManager().then(response => {
-        console.log(response);
         this.options1=response.rows;
       });
     },
     selectAllAdmServicetp(){
       selectAllAdmServicetp().then(response => {
-        console.log(response);
         this.options2=response.rows;
       });
     },
     selectAllUserUngive(){
       selectAllUserUngive().then(response => {
-        console.log(response);
         this.options3=response.rows;
       });
     },
@@ -295,6 +342,7 @@ export default {
     getList() {
       this.loading = true;
       listAdm_clerk(this.queryParams).then(response => {
+        console.log(response);
         this.adm_clerkList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -303,6 +351,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.look = false;
       this.reset();
     },
     // 表单重置
@@ -345,10 +394,11 @@ export default {
       this.reset();
       const clid = row.clid || this.ids
       getAdm_clerk(clid).then(response => {
+        console.log(response);
         this.form = response.data;
         this.admPsbsClkserList = response.data.admPsbsClkserList;
-        this.open = true;
-        this.title = "修改店员管理";
+        this.look = true;
+        this.title = "修改店员信息";
       });
     },
     /** 提交按钮 */

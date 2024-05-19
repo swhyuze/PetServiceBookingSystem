@@ -37,8 +37,35 @@ public class AdmPsbsCustomer extends BaseEntity
     /** 顾客类型 */
     @Excel(name = "顾客类型")
     private Long cutp;
+    private String unikename;
+    private String uname;
+    private String unum;
 
-    public void setCuid(Long cuid) 
+    public String getUnikename() {
+        return unikename;
+    }
+
+    public void setUnikename(String unikename) {
+        this.unikename = unikename;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getUnum() {
+        return unum;
+    }
+
+    public void setUnum(String unum) {
+        this.unum = unum;
+    }
+
+    public void setCuid(Long cuid)
     {
         this.cuid = cuid;
     }

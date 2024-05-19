@@ -14,15 +14,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAdmPsbsCustomerVo">
-        select cuid, cusex, cunum, cuname, uid, cutp from psbs_customer
+        SELECT psbs_customer.*,
+               sys_user.user_name AS uname,
+               sys_user.phonenumber AS unum,
+               sys_user.nick_name AS unikename,
+               sys_user.sex AS cusex FROM psbs_customer
+        LEFT JOIN sys_user ON psbs_customer.uid=sys_user.user_id
     </sql>
 
     <select id="selectAdmPsbsCustomerList" parameterType="AdmPsbsCustomer" resultMap="AdmPsbsCustomerResult">
         <include refid="selectAdmPsbsCustomerVo"/>
         <where>  
-            <if test="cusex != null "> and cusex = #{cusex}</if>
-            <if test="cunum != null  and cunum != ''"> and cunum like concat('%', #{cunum}, '%')</if>
-            <if test="cuname != null  and cuname != ''"> and cuname like concat('%', #{cuname}, '%')</if>
+            <if test="cusex != null "> and sys_user.sex = #{cusex}</if>
+            <if test="unum != null  and unum != ''"> and sys_user.phonenumber like concat('%', #{unum}, '%')</if>
+            <if test="uname != null  and uname != ''"> and sys_user.user_name like concat('%', #{uname}, '%')</if>
+            <if test="unikename != null  and unikename != ''"> and sys_user.nick_name like concat('%', #{unikename}, '%')</if>
             <if test="uid != null "> and uid like concat('%', #{uid}, '%')</if>
             <if test="cutp != null "> and cutp = #{cutp}</if>
         </where>
@@ -57,15 +63,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateAdmPsbsCustomer" parameterType="AdmPsbsCustomer">
-        update psbs_customer
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="cusex != null">cusex = #{cusex},</if>
-            <if test="cunum != null">cunum = #{cunum},</if>
-            <if test="cuname != null">cuname = #{cuname},</if>
-            <if test="uid != null">uid = #{uid},</if>
-            <if test="cutp != null">cutp = #{cutp},</if>
-        </trim>
-        where cuid = #{cuid}
+        update psbs_customer SET
+            cutp = #{cutp}
+        where cuid = #{cuid};
+        update sys_user SET
+            sex = #{cusex}
+        where user_id = #{uid};
     </update>
 
     <delete id="deleteAdmPsbsCustomerByCuid" parameterType="Long">

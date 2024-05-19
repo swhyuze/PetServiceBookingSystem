@@ -219,11 +219,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</delete>
 
 	<select id="selectAllUserUngive" parameterType="SysUser" resultMap="SysUserResult">
-		SELECT sys_user.user_id,sys_user.user_name FROM sys_user
+		SELECT sys_user.user_id,sys_user.user_name,psbs_clerk.uid,psbs_customer.uid,psbs_manager.uid FROM sys_user
 		LEFT JOIN psbs_manager ON psbs_manager.uid=sys_user.user_id
 		LEFT JOIN psbs_clerk ON psbs_clerk.uid=sys_user.user_id
+		LEFT JOIN psbs_customer ON psbs_customer.uid=sys_user.user_id
 		LEFT JOIN sys_user_role ON sys_user_role.user_id=sys_user.user_id
-		WHERE role_id=102 AND psbs_clerk.uid IS NULL AND psbs_manager.uid IS NULL
+		WHERE (role_id=102 OR role_id=101 OR role_id=103) AND psbs_clerk.uid IS NULL AND psbs_manager.uid IS NULL AND psbs_customer.uid IS NULL
 	</select>
 
 </mapper> 

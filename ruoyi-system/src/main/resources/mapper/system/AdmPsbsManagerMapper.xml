@@ -15,18 +15,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAdmPsbsManagerVo">
-        select mid, msex, mnum, maddress, mname, msname, uid from psbs_manager
+        SELECT psbs_manager.*,
+               sys_user.nick_name AS mname,
+               sys_user.sex AS msex,
+               sys_user.phonenumber AS mnum,
+               sys_user.user_name AS uname
+        FROM psbs_manager
+        LEFT JOIN sys_user ON psbs_manager.uid=sys_user.user_id
     </sql>
 
     <select id="selectAdmPsbsManagerList" parameterType="AdmPsbsManager" resultMap="AdmPsbsManagerResult">
         <include refid="selectAdmPsbsManagerVo"/>
         <where>  
             <if test="mid != null "> and mid = #{mid}</if>
-            <if test="msex != null "> and msex = #{msex}</if>
-            <if test="mnum != null  and mnum != ''"> and mnum = #{mnum}</if>
+            <if test="msex != null "> and sys_user.sex = #{msex}</if>
+            <if test="mnum != null  and mnum != ''"> and sys_user.phonenumber like concat('%', #{mnum}, '%')</if>
             <if test="maddress != null  and maddress != ''"> and maddress like concat('%', #{maddress}, '%')</if>
-            <if test="mname != null  and mname != ''"> and mname like concat('%', #{mname}, '%')</if>
+            <if test="mname != null  and mname != ''"> and sys_user.nick_name like concat('%', #{mname}, '%')</if>
             <if test="msname != null  and msname != ''"> and msname like concat('%', #{msname}, '%')</if>
+            <if test="uname != null  and uname != ''"> and sys_user.user_name like concat('%', #{usname}, '%')</if>
             <if test="uid != null "> and uid = #{uid}</if>
         </where>
     </select>

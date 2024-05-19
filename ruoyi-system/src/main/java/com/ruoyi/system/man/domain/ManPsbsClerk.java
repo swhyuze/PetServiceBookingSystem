@@ -38,6 +38,15 @@ public class ManPsbsClerk extends BaseEntity
     /** 登录账号 */
     @Excel(name = "登录账号")
     private Long uid;
+    private String uname;
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
 
     /** 店员服务信息 */
     private List<ManPsbsClkser> manPsbsClkserList;

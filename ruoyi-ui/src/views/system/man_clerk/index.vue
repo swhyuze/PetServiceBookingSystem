@@ -19,22 +19,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="店员电话" prop="clnum">
-        <el-input
-          v-model="queryParams.clnum"
-          placeholder="请输入店员电话"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="登录账号" prop="uid">
-        <el-input
-          v-model="queryParams.uid"
-          placeholder="请输入登录账号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -63,16 +47,6 @@
           v-hasPermi="['system:man_clerk:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:man_clerk:export']"
-        >导出</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -86,7 +60,7 @@
         </template>
       </el-table-column>
       <el-table-column label="店员电话" align="center" prop="clnum" />
-      <el-table-column label="登录账号" align="center" prop="uid" />
+      <el-table-column label="登录账号" align="center" prop="uname" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -138,10 +112,15 @@
         </el-row>
         <el-table :data="manPsbsClkserList" :row-class-name="rowManPsbsClkserIndex" @selection-change="handleManPsbsClkserSelectionChange" ref="manPsbsClkser">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="服务种类编号" prop="stid" width="150">
+          <el-table-column label="服务种类名称" prop="stid" width="450">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.stid" placeholder="请选择服务种类编号">
-                <el-option label="请选择字典生成" value="" />
+              <el-select v-model="scope.row.stid" placeholder="请选择服务种类">
+                <el-option
+                  v-for="dict in options"
+                  :key="dict.stid"
+                  :label="dict.stname"
+                  :value="parseInt(dict.stid)"
+                ></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -157,12 +136,14 @@
 
 <script>
 import { listMan_clerk, getMan_clerk, delMan_clerk, addMan_clerk, updateMan_clerk } from "@/api/system/man_clerk";
+import { selectAllAdmServicetp } from "@/api/system/adm_servicetp";
 
 export default {
   name: "Man_clerk",
   dicts: ['sys_user_sex'],
   data() {
     return {
+      options:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -213,8 +194,15 @@ export default {
   },
   created() {
     this.getList();
+    this.selectAllAdmServicetp();
   },
   methods: {
+    selectAllAdmServicetp(){
+      selectAllAdmServicetp().then(response => {
+        console.log(response);
+        this.options=response.rows;
+      });
+    },
     /** 查询店员管理列表 */
     getList() {
       this.loading = true;

@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="店长编号" prop="mid">
-        <el-input
-          v-model="queryParams.mid"
-          placeholder="请输入店长编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="店长性别" prop="msex">
         <el-select v-model="queryParams.msex" placeholder="请选择店长性别" clearable>
           <el-option
@@ -123,7 +115,7 @@
       <el-table-column label="店面地址" align="center" prop="maddress" />
       <el-table-column label="店长姓名" align="center" prop="mname" />
       <el-table-column label="店面名称" align="center" prop="msname" />
-      <el-table-column label="登录账号" align="center" prop="uid" />
+      <el-table-column label="登录账号" align="center" prop="uname" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -155,27 +147,21 @@
     <!-- 添加或修改宠物店管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="店长性别" prop="msex">
-          <el-select v-model="form.msex" placeholder="请选择店长性别">
-            <el-option
-              v-for="dict in dict.type.sys_user_sex"
-              :key="dict.value"
-              :label="dict.label"
-              :value="parseInt(dict.value)"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="店长电话" prop="mnum">
-          <el-input v-model="form.mnum" placeholder="请输入店长电话" />
+        <el-form-item label="店面名称" prop="msname">
+          <el-input v-model="form.msname" placeholder="请输入店面名称" />
         </el-form-item>
         <el-form-item label="店面地址" prop="maddress">
           <el-input v-model="form.maddress" placeholder="请输入店面地址" />
         </el-form-item>
-        <el-form-item label="店长姓名" prop="mname">
-          <el-input v-model="form.mname" placeholder="请输入店长姓名" />
-        </el-form-item>
-        <el-form-item label="店面名称" prop="msname">
-          <el-input v-model="form.msname" placeholder="请输入店面名称" />
+        <el-form-item label="登录账号" prop="uid">
+          <el-select v-model="form.uid" placeholder="请选择登录账号">
+            <el-option
+              v-for="dict in options"
+              :key="dict.userId"
+              :label="dict.userName"
+              :value="parseInt(dict.userId)"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -188,12 +174,14 @@
 
 <script>
 import { listAdm_manager, getAdm_manager, delAdm_manager, addAdm_manager, updateAdm_manager } from "@/api/system/adm_manager";
+import { selectAllUserUngive } from "@/api/system/user";
 
 export default {
   name: "Adm_manager",
   dicts: ['sys_user_sex'],
   data() {
     return {
+      options:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -248,8 +236,15 @@ export default {
   },
   created() {
     this.getList();
+    this.selectAllUserUngive();
   },
   methods: {
+    selectAllUserUngive(){
+      selectAllUserUngive().then(response => {
+        console.log(response);
+        this.options=response.rows;
+      });
+    },
     /** 查询宠物店管理列表 */
     getList() {
       this.loading = true;

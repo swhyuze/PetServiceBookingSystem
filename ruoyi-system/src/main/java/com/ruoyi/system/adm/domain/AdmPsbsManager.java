@@ -43,7 +43,17 @@ public class AdmPsbsManager extends BaseEntity
     @Excel(name = "登录账号")
     private Long uid;
 
-    public void setMid(Long mid) 
+    private String uname;
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setMid(Long mid)
     {
         this.mid = mid;
     }

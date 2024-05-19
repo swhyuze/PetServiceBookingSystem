@@ -11,26 +11,26 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="顾客电话" prop="cunum">
+      <el-form-item label="顾客姓名" prop="unikename">
         <el-input
-          v-model="queryParams.cunum"
-          placeholder="请输入顾客电话"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="顾客姓名" prop="cuname">
-        <el-input
-          v-model="queryParams.cuname"
+          v-model="queryParams.unikename"
           placeholder="请输入顾客姓名"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="登录账号" prop="uid">
+      <el-form-item label="登录账号" prop="uname">
         <el-input
-          v-model="queryParams.uid"
+          v-model="queryParams.uname"
           placeholder="请输入登录账号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="顾客手机" prop="unum">
+        <el-input
+          v-model="queryParams.unum"
+          placeholder="请输入顾客手机"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -52,27 +52,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:adm_customer:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:adm_customer:edit']"
-        >修改</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -105,9 +84,9 @@
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.cusex"/>
         </template>
       </el-table-column>
-      <el-table-column label="顾客电话" align="center" prop="cunum" />
-      <el-table-column label="顾客姓名" align="center" prop="cuname" />
-      <el-table-column label="登录账号" align="center" prop="uid" />
+      <el-table-column label="顾客电话" align="center" prop="unum" />
+      <el-table-column label="顾客姓名" align="center" prop="unikename" />
+      <el-table-column label="登录账号" align="center" prop="uname" />
       <el-table-column label="顾客类型" align="center" prop="cutp">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_customer_type" :value="scope.row.cutp"/>
@@ -153,15 +132,6 @@
               :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="顾客电话" prop="cunum">
-          <el-input v-model="form.cunum" placeholder="请输入顾客电话" />
-        </el-form-item>
-        <el-form-item label="顾客姓名" prop="cuname">
-          <el-input v-model="form.cuname" placeholder="请输入顾客姓名" />
-        </el-form-item>
-        <el-form-item label="登录账号" prop="uid">
-          <el-input v-model="form.uid" placeholder="请输入登录账号" />
         </el-form-item>
         <el-form-item label="顾客类型" prop="cutp">
           <el-select v-model="form.cutp" placeholder="请选择顾客类型">
@@ -215,6 +185,9 @@ export default {
         cusex: null,
         cunum: null,
         cuname: null,
+        uname: null,
+        unikename: null,
+        unum: null,
         uid: null,
         cutp: null
       },

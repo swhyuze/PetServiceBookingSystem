@@ -28,7 +28,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectManPsbsClerkList" parameterType="ManPsbsClerk" resultMap="ManPsbsClerkResult">
-        <include refid="selectManPsbsClerkVo"/>
+        SELECT psbs_clerk.*,sys_user.user_name AS uname FROM psbs_clerk
+        LEFT JOIN sys_user ON psbs_clerk.uid=sys_user.user_id
         <where>  
             <if test="clname != null  and clname != ''"> and clname like concat('%', #{clname}, '%')</if>
             <if test="clsex != null "> and clsex = #{clsex}</if>

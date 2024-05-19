@@ -15,8 +15,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectAdmPsbsClkserList" parameterType="AdmPsbsClkser" resultMap="AdmPsbsClkserResult">
-        SELECT psbs_clkser.*,psbs_servicetp.stname,psbs_clerk.clname FROM psbs_clkser
+        SELECT psbs_clkser.*,psbs_servicetp.stname,psbs_clerk.uid,sys_user.nick_name as clname FROM psbs_clkser
         LEFT JOIN psbs_clerk ON psbs_clkser.clid=psbs_clerk.clid
+        LEFT JOIN sys_user ON psbs_clerk.uid=sys_user.user_id
         LEFT JOIN psbs_servicetp ON psbs_servicetp.stid=psbs_clkser.stid
         <where>  
             <if test="clser != null "> and clser = #{clser}</if>
