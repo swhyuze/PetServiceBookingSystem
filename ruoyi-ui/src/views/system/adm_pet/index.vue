@@ -19,6 +19,22 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="宠物主人" prop="pthost">
+        <el-input
+          v-model="queryParams.pthost"
+          placeholder="请输入宠物主人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="种类名称" prop="ptname">
+        <el-input
+          v-model="queryParams.ptname"
+          placeholder="种类名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -26,27 +42,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:adm_pet:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:adm_pet:edit']"
-        >修改</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -80,7 +75,8 @@
           <dict-tag :options="dict.type.sys_pet_sex" :value="scope.row.psex"/>
         </template>
       </el-table-column>
-      <el-table-column label="种类编号" align="center" prop="ptid" />
+      <el-table-column label="种类名称" align="center" prop="ptname" />
+      <el-table-column label="宠物主人" align="center" prop="pthost" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -113,13 +109,13 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="宠物姓名" prop="pname">
-          <el-input v-model="form.pname" placeholder="请输入宠物姓名" />
+          <el-input v-model="form.pname" placeholder="请输入宠物姓名" :disabled="true"/>
         </el-form-item>
         <el-form-item label="注意事项" prop="pps">
-          <el-input v-model="form.pps" placeholder="请输入注意事项" />
+          <el-input v-model="form.pps" placeholder="请输入注意事项" :disabled="true"/>
         </el-form-item>
         <el-form-item label="宠物性别" prop="psex">
-          <el-select v-model="form.psex" placeholder="请选择宠物性别">
+          <el-select v-model="form.psex" placeholder="请选择宠物性别" :disabled="true">
             <el-option
               v-for="dict in dict.type.sys_pet_sex"
               :key="dict.value"
@@ -130,7 +126,6 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -171,6 +166,8 @@ export default {
         pps: null,
         psex: null,
         ptid: null,
+        ptname: null,
+        pthost: null
       },
       // 表单参数
       form: {},
@@ -241,7 +238,7 @@ export default {
       getAdm_pet(pid).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改宠物管理";
+        this.title = "查看宠物信息";
       });
     },
     /** 提交按钮 */

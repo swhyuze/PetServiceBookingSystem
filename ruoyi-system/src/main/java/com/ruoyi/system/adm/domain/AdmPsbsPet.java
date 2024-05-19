@@ -37,7 +37,26 @@ public class AdmPsbsPet extends BaseEntity
     /** 宠物照片 */
     private String ptpic;
 
-    public void setPid(Long pid) 
+    private String pthost;
+    private String ptname;
+
+    public String getPtname() {
+        return ptname;
+    }
+
+    public void setPtname(String ptname) {
+        this.ptname = ptname;
+    }
+
+    public String getPthost() {
+        return pthost;
+    }
+
+    public void setPthost(String pthost) {
+        this.pthost = pthost;
+    }
+
+    public void setPid(Long pid)
     {
         this.pid = pid;
     }

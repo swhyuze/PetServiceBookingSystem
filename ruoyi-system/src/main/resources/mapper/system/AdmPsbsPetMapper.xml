@@ -14,7 +14,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAdmPsbsPetVo">
-        select pid, pname, pps, psex, ptid, ptpic from psbs_pet
+        SELECT psbs_pet.*,psbs_customer.uid,sys_user.nick_name AS pthost,psbs_pettp.ptname FROM psbs_pet
+        LEFT JOIN psbs_customer ON psbs_customer.cuid=psbs_pet.cuid
+        LEFT JOIN psbs_pettp ON psbs_pettp.ptid=psbs_pet.ptid
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_customer.uid
     </sql>
 
     <select id="selectAdmPsbsPetList" parameterType="AdmPsbsPet" resultMap="AdmPsbsPetResult">
@@ -24,6 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pps != null  and pps != ''"> and pps = #{pps}</if>
             <if test="psex != null "> and psex = #{psex}</if>
             <if test="ptid != null "> and ptid = #{ptid}</if>
+            <if test="ptname != null  and ptname != ''"> and psbs_pettp.ptname like concat('%', #{ptname}, '%')</if>
+            <if test="pthost != null  and pthost != ''"> and sys_user.nick_name like concat('%', #{pthost}, '%')</if>
         </where>
     </select>
     
