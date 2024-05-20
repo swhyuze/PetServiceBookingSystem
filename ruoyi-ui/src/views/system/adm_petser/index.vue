@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="服务编号" prop="stid">
+      <el-form-item label="服务种类" prop="stname">
         <el-input
-          v-model="queryParams.stid"
-          placeholder="请输入服务编号"
+          v-model="queryParams.stname"
+          placeholder="请输入服务种类"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="宠物种类编号" prop="ptid">
+      <el-form-item label="宠物种类" prop="ptname">
         <el-input
-          v-model="queryParams.ptid"
-          placeholder="请输入宠物种类编号"
+          v-model="queryParams.ptname"
+          placeholder="请输入宠物种类"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -33,17 +33,6 @@
           @click="handleAdd"
           v-hasPermi="['system:adm_petser:add']"
         >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:adm_petser:edit']"
-        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -71,9 +60,9 @@
 
     <el-table v-loading="loading" :data="adm_petserList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="宠物服务编号" align="center" prop="psid" />
-      <el-table-column label="服务编号" align="center" prop="stid" />
-      <el-table-column label="宠物种类编号" align="center" prop="ptid" />
+      <el-table-column label="编号" align="center" prop="psid" />
+      <el-table-column label="服务种类" align="center" prop="stname" />
+      <el-table-column label="宠物种类" align="center" prop="ptname" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -106,10 +95,24 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="服务编号" prop="stid">
-          <el-input v-model="form.stid" placeholder="请输入服务编号" />
+          <el-select v-model="form.stid" placeholder="请选择服务种类">
+            <el-option
+              v-for="dict in option2"
+              :key="dict.stid"
+              :label="dict.stname"
+              :value="parseInt(dict.stid)"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="宠物种类编号" prop="ptid">
-          <el-input v-model="form.ptid" placeholder="请输入宠物种类编号" />
+        <el-form-item label="宠物品种" prop="ptid">
+          <el-select v-model="form.ptid" placeholder="请选择宠物品种">
+            <el-option
+              v-for="dict in option1"
+              :key="dict.ptid"
+              :label="dict.ptname"
+              :value="parseInt(dict.ptid)"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -122,11 +125,14 @@
 
 <script>
 import { listAdm_petser, getAdm_petser, delAdm_petser, addAdm_petser, updateAdm_petser } from "@/api/system/adm_petser";
-
+import { selectAdmPsbsPettpAll } from "@/api/system/cum_pet";
+import { selectAllAdmServicetp } from "@/api/system/adm_servicetp";
 export default {
   name: "Adm_petser",
   data() {
     return {
+      option1:[],
+      option2:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -150,7 +156,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         stid: null,
-        ptid: null
+        ptid: null,
+        stname: null,
+        ptname: null
       },
       // 表单参数
       form: {},
@@ -161,8 +169,22 @@ export default {
   },
   created() {
     this.getList();
+    this.selectAdmPsbsPettpAll();
+    this.selectAllAdmServicetp();
   },
   methods: {
+    selectAdmPsbsPettpAll() {
+      selectAdmPsbsPettpAll().then(response => {
+        console.log(response);
+        this.option1=response.rows;
+      });
+    },
+    selectAllAdmServicetp(){
+      selectAllAdmServicetp().then(response => {
+        console.log(response);
+        this.option2=response.rows;
+      });
+    },
     /** 查询宠物服务列表 */
     getList() {
       this.loading = true;

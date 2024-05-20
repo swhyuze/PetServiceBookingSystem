@@ -11,7 +11,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAdmPsbsPetserVo">
-        select psid, stid, ptid from psbs_petser
+        SELECT psbs_petser.*,
+               psbs_pettp.ptname,
+               psbs_servicetp.stname
+        FROM psbs_petser
+        LEFT JOIN psbs_pettp ON psbs_pettp.ptid=psbs_petser.ptid
+        LEFT JOIN psbs_servicetp ON psbs_servicetp.stid=psbs_petser.stid
     </sql>
 
     <select id="selectAdmPsbsPetserList" parameterType="AdmPsbsPetser" resultMap="AdmPsbsPetserResult">
@@ -19,6 +24,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="stid != null "> and stid = #{stid}</if>
             <if test="ptid != null "> and ptid = #{ptid}</if>
+            <if test="ptname != null  and ptname != ''"> and psbs_pettp.ptname like concat('%', #{ptname}, '%')</if>
+            <if test="stname != null  and stname != ''"> and psbs_servicetp.stname like concat('%', #{stname}, '%')</if>
         </where>
     </select>
     

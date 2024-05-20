@@ -26,7 +26,26 @@ public class AdmPsbsPetser extends BaseEntity
     @Excel(name = "宠物种类编号")
     private Long ptid;
 
-    public void setPsid(Long psid) 
+    private String ptname;
+    private String stname;
+
+    public String getPtname() {
+        return ptname;
+    }
+
+    public void setPtname(String ptname) {
+        this.ptname = ptname;
+    }
+
+    public String getStname() {
+        return stname;
+    }
+
+    public void setStname(String stname) {
+        this.stname = stname;
+    }
+
+    public void setPsid(Long psid)
     {
         this.psid = psid;
     }
