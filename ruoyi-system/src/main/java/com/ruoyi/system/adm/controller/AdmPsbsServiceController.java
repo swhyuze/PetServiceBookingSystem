@@ -1,5 +1,6 @@
 package com.ruoyi.system.adm.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -72,7 +73,6 @@ public class AdmPsbsServiceController extends BaseController
     /**
      * 新增服务记录
      */
-    @PreAuthorize("@ss.hasPermi('system:adm_service:add')")
     @Log(title = "服务记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody AdmPsbsService admPsbsService)

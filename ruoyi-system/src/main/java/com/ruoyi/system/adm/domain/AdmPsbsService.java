@@ -62,7 +62,82 @@ public class AdmPsbsService extends BaseEntity
     @Excel(name = "服务花费")
     private Long sermoney;
 
-    public void setSerid(Long serid) 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date sdate;
+    @JsonFormat(pattern = "HH:mm:ss")
+    private Date stime;
+
+    private String stname;
+    private String clname;
+    private String msname;
+    private String pname;
+    private Long cuid;
+    private String cuname;
+
+    public String getStname() {
+        return stname;
+    }
+
+    public void setStname(String stname) {
+        this.stname = stname;
+    }
+
+    public String getClname() {
+        return clname;
+    }
+
+    public void setClname(String clname) {
+        this.clname = clname;
+    }
+
+    public String getMsname() {
+        return msname;
+    }
+
+    public void setMsname(String msname) {
+        this.msname = msname;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public Long getCuid() {
+        return cuid;
+    }
+
+    public void setCuid(Long cuid) {
+        this.cuid = cuid;
+    }
+
+    public String getCuname() {
+        return cuname;
+    }
+
+    public void setCuname(String cuname) {
+        this.cuname = cuname;
+    }
+    public Date getSdate() {
+        return sdate;
+    }
+
+    public void setSdate(Date sdate) {
+        this.sdate = sdate;
+    }
+
+    public Date getStime() {
+        return stime;
+    }
+
+    public void setStime(Date stime) {
+        this.stime = stime;
+    }
+
+    public void setSerid(Long serid)
     {
         this.serid = serid;
     }

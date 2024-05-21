@@ -17,13 +17,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectCumPsbsServicetpList" parameterType="CumPsbsServicetp" resultMap="CumPsbsServicetpResult">
-        <include refid="selectCumPsbsServicetpVo"/>
+        SELECT psbs_servicetp.*,
+               psbs_clkser.clid,
+               sys_user.nick_name,
+               psbs_manager.msname AS msname,
+               psbs_manager.mid AS mid
+        FROM psbs_servicetp
+        LEFT JOIN psbs_clkser ON psbs_clkser.stid=psbs_servicetp.stid
+        LEFT JOIN psbs_clerk ON psbs_clerk.clid=psbs_clkser.clid
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
+        LEFT JOIN psbs_manager ON psbs_manager.mid=psbs_clerk.mid
         <where>  
             <if test="stname != null  and stname != ''"> and stname like concat('%', #{stname}, '%')</if>
             <if test="params.beginStmoney != null and params.beginStmoney != '' and params.endStmoney != null and params.endStmoney != ''"> and stmoney between #{params.beginStmoney} and #{params.endStmoney}</if>
             <if test="stmtp != null "> and stmtp = #{stmtp}</if>
             <if test="stps != null  and stps != ''"> and stps like concat('%', #{stps}, '%')</if>
+            <if test="mid != null "> and psbs_manager.mid = #{mid}</if>
         </where>
+        GROUP BY stid
     </select>
     
     <select id="selectCumPsbsServicetpByStid" parameterType="Long" resultMap="CumPsbsServicetpResult">

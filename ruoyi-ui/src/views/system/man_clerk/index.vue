@@ -28,16 +28,6 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:man_clerk:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="danger"
           plain
           icon="el-icon-delete"
@@ -97,9 +87,6 @@
               :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="店员电话" prop="clnum">
-          <el-input v-model="form.clnum" placeholder="请输入店员电话" />
         </el-form-item>
         <el-divider content-position="center">店员服务信息</el-divider>
         <el-row :gutter="10" class="mb8">

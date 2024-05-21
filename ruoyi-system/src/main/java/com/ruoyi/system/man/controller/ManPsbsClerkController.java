@@ -2,6 +2,10 @@ package com.ruoyi.system.man.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.adm.domain.AdmPsbsManager;
+import com.ruoyi.system.adm.service.IAdmPsbsManagerService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +38,8 @@ public class ManPsbsClerkController extends BaseController
     @Autowired
     private IManPsbsClerkService manPsbsClerkService;
 
+    @Autowired
+    private IAdmPsbsManagerService admPsbsManagerService;
     /**
      * 查询店员管理列表
      */
@@ -41,6 +47,9 @@ public class ManPsbsClerkController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ManPsbsClerk manPsbsClerk)
     {
+        AdmPsbsManager admPsbsManager=new AdmPsbsManager();
+        admPsbsManager.setUid(SecurityUtils.getUserId());
+        manPsbsClerk.setMid(admPsbsManagerService.selectAdmPsbsManagerList(admPsbsManager).get(0).getMid());
         startPage();
         List<ManPsbsClerk> list = manPsbsClerkService.selectManPsbsClerkList(manPsbsClerk);
         return getDataTable(list);

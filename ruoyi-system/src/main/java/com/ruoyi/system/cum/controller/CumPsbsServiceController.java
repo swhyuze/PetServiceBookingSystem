@@ -2,6 +2,9 @@ package com.ruoyi.system.cum.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.adm.service.IAdmPsbsCustomerService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +37,8 @@ public class CumPsbsServiceController extends BaseController
     @Autowired
     private ICumPsbsServiceService cumPsbsServiceService;
 
+    @Autowired
+    private IAdmPsbsCustomerService admPsbsCustomerService;
     /**
      * 查询订单查询列表
      */
@@ -41,6 +46,7 @@ public class CumPsbsServiceController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(CumPsbsService cumPsbsService)
     {
+        cumPsbsService.setCuid(admPsbsCustomerService.selectAdmPsbsCustomerByUid(SecurityUtils.getUserId()).getCuid());
         startPage();
         List<CumPsbsService> list = cumPsbsServiceService.selectCumPsbsServiceList(cumPsbsService);
         return getDataTable(list);

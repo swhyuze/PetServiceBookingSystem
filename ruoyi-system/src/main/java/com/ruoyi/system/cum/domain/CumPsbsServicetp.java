@@ -33,7 +33,53 @@ public class CumPsbsServicetp extends BaseEntity
     /** 服务描述 */
     private String stps;
 
-    public void setStid(Long stid) 
+    private long sttime;
+    private long clid;
+    private String clname;
+    private long mid;
+    private String msname;
+
+    public long getMid() {
+        return mid;
+    }
+
+    public void setMid(long mid) {
+        this.mid = mid;
+    }
+
+    public long getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(long sttime) {
+        this.sttime = sttime;
+    }
+
+    public long getClid() {
+        return clid;
+    }
+
+    public void setClid(long clid) {
+        this.clid = clid;
+    }
+
+    public String getClname() {
+        return clname;
+    }
+
+    public void setClname(String clname) {
+        this.clname = clname;
+    }
+
+    public String getMsname() {
+        return msname;
+    }
+
+    public void setMsname(String msname) {
+        this.msname = msname;
+    }
+
+    public void setStid(Long stid)
     {
         this.stid = stid;
     }

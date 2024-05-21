@@ -1,52 +1,44 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="服务种类" prop="stid">
+      <el-form-item label="服务种类" prop="stname">
         <el-input
-          v-model="queryParams.stid"
+          v-model="queryParams.stname"
           placeholder="请输入服务种类"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="店员" prop="clid">
+      <el-form-item label="店员" prop="clname">
         <el-input
-          v-model="queryParams.clid"
+          v-model="queryParams.clname"
           placeholder="请输入店员"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="宠物店" prop="mid">
+      <el-form-item label="宠物店" prop="msname">
         <el-input
-          v-model="queryParams.mid"
+          v-model="queryParams.msname"
           placeholder="请输入宠物店"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="宠物编号" prop="pid">
+      <el-form-item label="宠物" prop="pname">
         <el-input
-          v-model="queryParams.pid"
-          placeholder="请输入宠物编号"
+          v-model="queryParams.pname"
+          placeholder="请输入宠物名字"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="服务开始时间" prop="serstime">
+      <el-form-item label="服务时间" prop="serstime">
         <el-date-picker clearable
           v-model="queryParams.serstime"
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="请选择服务开始时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="服务结束时间" prop="seretime">
-        <el-date-picker clearable
-          v-model="queryParams.seretime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择服务结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="服务评分" prop="serscore">
@@ -59,14 +51,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="服务评价" prop="serassess">
-        <el-input
-          v-model="queryParams.serassess"
-          placeholder="请输入服务评价"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="服务状态" prop="serstate">
         <el-select v-model="queryParams.serstate" placeholder="请选择服务状态" clearable>
           <el-option
@@ -76,14 +60,6 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="服务花费" prop="sermoney">
-        <el-input
-          v-model="queryParams.sermoney"
-          placeholder="请输入服务花费"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -199,7 +175,6 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>

@@ -43,6 +43,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="clsex != null "> and sys_user.sex = #{clsex}</if>
             <if test="msname != null  and msname != ''"> and psbs_manager.msname like concat('%', #{msname}, '%')</if>
             <if test="uname != null "> and sys_user.user_name like concat('%', #{uname}, '%')</if>
+            <if test="mid != null "> and psbs_clerk.mid = #{mid}</if>
+            <if test="uid != null "> and psbs_clerk.uid=#{uid}</if>
         </where>
     </select>
     

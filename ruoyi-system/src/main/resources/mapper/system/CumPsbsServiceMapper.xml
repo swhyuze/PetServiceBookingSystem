@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="clid"    column="clid"    />
         <result property="mid"    column="mid"    />
         <result property="pid"    column="pid"    />
+        <result property="cuid"    column="cuid"    />
         <result property="serstime"    column="serstime"    />
         <result property="seretime"    column="seretime"    />
         <result property="serscore"    column="serscore"    />
@@ -19,7 +20,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCumPsbsServiceVo">
-        select serid, stid, clid, mid, pid, serstime, seretime, serscore, serassess, serstate, sermoney from psbs_service
+        SELECT psbs_service.*,
+               psbs_pet.pname AS pname,
+               psbs_servicetp.stname AS stname,
+               psbs_manager.msname AS msname,
+               sys_user.nick_name AS clname
+        FROM psbs_service
+        LEFT JOIN psbs_pet ON psbs_service.pid=psbs_pet.pid
+        LEFT JOIN psbs_servicetp ON psbs_service.stid=psbs_servicetp.stid
+        LEFT JOIN psbs_manager ON psbs_manager.mid=psbs_service.mid
+        LEFT JOIN psbs_clerk ON psbs_clerk.clid=psbs_service.clid
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
     </sql>
 
     <select id="selectCumPsbsServiceList" parameterType="CumPsbsService" resultMap="CumPsbsServiceResult">
@@ -29,12 +40,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="clid != null "> and clid = #{clid}</if>
             <if test="mid != null "> and mid = #{mid}</if>
             <if test="pid != null "> and pid = #{pid}</if>
-            <if test="serstime != null "> and serstime = #{serstime}</if>
-            <if test="seretime != null "> and seretime = #{seretime}</if>
+            <if test="cuid != null "> and psbs_service.cuid = #{cuid}</if>
+            <if test="serstime != null "> and date(serstime)=#{serstime}</if>
+            <if test="seretime != null "> and date(seretime)=#{seretime}</if>
             <if test="serscore != null "> and serscore = #{serscore}</if>
             <if test="serassess != null  and serassess != ''"> and serassess = #{serassess}</if>
             <if test="serstate != null "> and serstate = #{serstate}</if>
             <if test="sermoney != null "> and sermoney = #{sermoney}</if>
+            <if test="stname != null "> and psbs_servicetp.stname like concat('%', #{stname}, '%')</if>
+            <if test="clname != null "> and sys_user.nick_name like concat('%', #{clname}, '%')</if>
+            <if test="msname != null "> and psbs_manager.msname like concat('%', #{msname}, '%')</if>
+            <if test="pname != null "> and psbs_pet.pname like concat('%', #{pname}, '%')</if>
         </where>
     </select>
     

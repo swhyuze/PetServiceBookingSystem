@@ -1,71 +1,45 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="服务种类" prop="stid">
+      <el-form-item label="服务种类" prop="stname">
         <el-input
-          v-model="queryParams.stid"
+          v-model="queryParams.stname"
           placeholder="请输入服务种类"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="店员" prop="clid">
+      <el-form-item label="店员" prop="clname">
         <el-input
-          v-model="queryParams.clid"
+          v-model="queryParams.clname"
           placeholder="请输入店员"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="宠物店" prop="mid">
+      <el-form-item label="宠物店" prop="msname">
         <el-input
-          v-model="queryParams.mid"
+          v-model="queryParams.msname"
           placeholder="请输入宠物店"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="宠物编号" prop="pid">
+      <el-form-item label="宠物" prop="pname">
         <el-input
-          v-model="queryParams.pid"
-          placeholder="请输入宠物编号"
+          v-model="queryParams.pname"
+          placeholder="请输入宠物名字"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开始时间" prop="serstime">
+      <el-form-item label="服务时间" prop="serstime">
         <el-date-picker clearable
           v-model="queryParams.serstime"
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="请选择服务开始时间">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间" prop="seretime">
-        <el-date-picker clearable
-          v-model="queryParams.seretime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择服务结束时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="服务评分" prop="serscore">
-        <el-select v-model="queryParams.serscore" placeholder="请选择服务评分" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_service_score"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="服务评价" prop="serassess">
-        <el-input
-          v-model="queryParams.serassess"
-          placeholder="请输入服务评价"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item label="服务状态" prop="serstate">
         <el-select v-model="queryParams.serstate" placeholder="请选择服务状态" clearable>
@@ -77,14 +51,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="服务花费" prop="sermoney">
-        <el-input
-          v-model="queryParams.sermoney"
-          placeholder="请输入服务花费"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -92,22 +58,10 @@
     </el-form>
 
     <el-table v-loading="loading" :data="cum_serviceList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="服务记录编号" align="center" prop="serid" />
-      <el-table-column label="服务种类" align="center" prop="stid" />
-      <el-table-column label="店员" align="center" prop="clid" />
-      <el-table-column label="宠物店" align="center" prop="mid" />
-      <el-table-column label="宠物编号" align="center" prop="pid" />
-      <el-table-column label="服务开始时间" align="center" prop="serstime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.serstime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="服务结束时间" align="center" prop="seretime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.seretime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="服务种类" align="center" prop="stname" />
+      <el-table-column label="店员" align="center" prop="clname" />
+      <el-table-column label="宠物店" align="center" prop="msname" />
+      <el-table-column label="宠物" align="center" prop="pname" />
       <el-table-column label="服务评分" align="center" prop="serscore">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_service_score" :value="scope.row.serscore"/>
@@ -151,6 +105,60 @@
     <!-- 添加或修改订单查询对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="服务种类" prop="stname">
+          <el-input v-model="form.stname" placeholder="请输入服务种类" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="店员" prop="clname">
+          <el-input v-model="form.clname" placeholder="请输入店员" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="宠物店" prop="msname">
+          <el-input v-model="form.msname" placeholder="请输入宠物店" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="宠物" prop="pname">
+          <el-input v-model="form.pname" placeholder="请输入宠物" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="开始时间" prop="serstime" >
+          <el-date-picker clearable
+            v-model="form.serstime"
+            type="datetime"
+            disabled="true"
+            placeholder="请选择服务开始时间">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束时间" prop="seretime" >
+          <el-date-picker clearable
+            v-model="form.seretime"
+            type="datetime"
+            disabled="true"
+            placeholder="请选择服务结束时间">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="服务状态" prop="serstate">
+          <el-select v-model="form.serstate" placeholder="请选择服务状态" disabled="true">
+            <el-option
+              v-for="dict in dict.type.sys_service_state"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务花费" prop="sermoney" disabled="true">
+          <el-input v-model="form.sermoney" placeholder="请输入服务花费" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="服务评分" prop="serscore">
+          <el-select v-model="form.serscore" placeholder="请选择服务评分">
+            <el-option
+              v-for="dict in dict.type.sys_service_score"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务评价" prop="serassess">
+          <el-input v-model="form.serassess" placeholder="请输入服务评价" />
+        </el-form-item> 
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -191,15 +199,21 @@ export default {
         pageNum: 1,
         pageSize: 10,
         stid: null,
+        stname: null,
         clid: null,
+        clname: null,
         mid: null,
+        msname: null,
         pid: null,
+        pname: null,
+        cuid: null,
         serstime: null,
         seretime: null,
         serscore: null,
         serassess: null,
         serstate: null,
-        sermoney: null
+        sermoney: null,
+        cuname: null
       },
       // 表单参数
       form: {},
@@ -207,22 +221,7 @@ export default {
       rules: {
         stid: [
           { required: true, message: "服务种类不能为空", trigger: "blur" }
-        ],
-        clid: [
-          { required: true, message: "店员不能为空", trigger: "blur" }
-        ],
-        mid: [
-          { required: true, message: "宠物店不能为空", trigger: "blur" }
-        ],
-        pid: [
-          { required: true, message: "宠物编号不能为空", trigger: "blur" }
-        ],
-        serstime: [
-          { required: true, message: "服务开始时间不能为空", trigger: "blur" }
-        ],
-        seretime: [
-          { required: true, message: "服务结束时间不能为空", trigger: "blur" }
-        ],
+        ]
       }
     };
   },
@@ -299,13 +298,13 @@ export default {
         if (valid) {
           if (this.form.serid != null) {
             updateCum_service(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
+              this.$modal.msgSuccess("评分成功");
               this.open = false;
               this.getList();
             });
           } else {
             addCum_service(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
+              this.$modal.msgSuccess("评分成功");
               this.open = false;
               this.getList();
             });
@@ -316,12 +315,22 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const serids = row.serid || this.ids;
-      this.$modal.confirm('是否确认删除订单查询编号为"' + serids + '"的数据项？').then(function() {
-        return delCum_service(serids);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+        getCum_service(serids).then(response => {
+          this.form = response.data;
+          if(this.form.serstate==0){
+            this.form.serstate=1;
+            updateCum_service(this.form);
+            this.getList();
+            this.$modal.msgSuccess("取消成功");
+          }
+          if(this.form.serstate==1){
+            this.$modal.msgSuccess("请勿反复取消");
+          }
+          if(this.form.serstate==2){
+            this.$modal.msgSuccess("已完成的订单无法取消");
+          }
+          this.reset();
+        });
     },
     /** 导出按钮操作 */
     handleExport() {

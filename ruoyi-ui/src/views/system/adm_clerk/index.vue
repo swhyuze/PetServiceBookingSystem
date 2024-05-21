@@ -342,7 +342,6 @@ export default {
     getList() {
       this.loading = true;
       listAdm_clerk(this.queryParams).then(response => {
-        console.log(response);
         this.adm_clerkList = response.rows;
         this.total = response.total;
         this.loading = false;

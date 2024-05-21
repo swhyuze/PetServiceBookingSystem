@@ -37,7 +37,6 @@ public class AdmPsbsClerkController extends BaseController
     /**
      * 查询店员管理列表
      */
-    @PreAuthorize("@ss.hasPermi('system:adm_clerk:list')")
     @GetMapping("/list")
     public TableDataInfo list(AdmPsbsClerk admPsbsClerk)
     {

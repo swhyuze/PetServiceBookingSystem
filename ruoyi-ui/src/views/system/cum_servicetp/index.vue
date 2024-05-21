@@ -9,14 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="服务价格" prop="stmoney">
-        <el-input
-          v-model="queryParams.stmoney"
-          placeholder="请输入服务价格"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="收费方式" prop="stmtp">
         <el-select v-model="queryParams.stmtp" placeholder="请选择收费方式" clearable>
           <el-option
@@ -27,9 +19,22 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="店铺" prop="mid">
+        <el-select v-model="queryParams.mid" placeholder="请选择店铺" clearable filterable="true">
+          <el-option
+            v-for="dict in options1"
+            :key="dict.mid"
+            :label="dict.msname"
+            :value="dict.mid"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button><br>
+      </el-form-item>
+      <el-form-item>        
+        <i class="el-icon-warning-outline">请先选择店铺，点击查询再进行其他操作</i>
       </el-form-item>
     </el-form>
 
@@ -46,15 +51,15 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-view"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:cum_servicetp:edit']"
           >查看</el-button>
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
+            icon="el-icon-edit"
+            @click="bookNew(scope.row)"
             v-hasPermi="['system:cum_servicetp:remove']"
           >预约</el-button>
         </template>
@@ -72,9 +77,71 @@
     <!-- 添加或修改服务种类对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="服务名称" prop="stname">
+          <el-input v-model="form.stname" placeholder="请输入服务名称" :disabled="true"/>
+        </el-form-item>
+        <el-form-item label="服务价格" prop="stmoney">
+          <el-input v-model="form.stmoney" placeholder="请输入服务价格" :disabled="true"/>
+        </el-form-item>
+        <el-form-item label="收费方式" prop="stmtp">
+          <el-select v-model="form.stmtp" placeholder="请选择收费方式" :disabled="true">
+            <el-option
+              v-for="dict in dict.type.sys_shoufei"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务描述" prop="stps">
+          <el-input v-model="form.stps" placeholder="请输入服务描述" type="textarea" :disabled="true"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="book" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="宠物名称" prop="pid">
+          <el-select v-model="form.pid" placeholder="请选择收费方式" clearable>
+            <el-option
+              v-for="dict in options3"
+              :key="dict.pid"
+              :label="dict.pname"
+              :value="dict.pid"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务人员" prop="clid">
+          <el-select v-model="form.stmtp" placeholder="请选择收费方式" clearable>
+            <el-option
+              v-for="dict in options2"
+              :key="dict.clid"
+              :label="dict.clname"
+              :value="dict.clid"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务日期" prop="sdate">
+          <el-date-picker clearable
+            v-model="form.sdate"
+            type="date"
+            placeholder="请选择服务日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="开始时间" prop="stime">
+          <el-time-picker clearable
+            v-model="form.stime"
+            type="time"
+            placeholder="请选择服务开始时间">
+          </el-time-picker>
+        </el-form-item>
+        
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="serviceAdd">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -83,12 +150,18 @@
 
 <script>
 import { listCum_servicetp, getCum_servicetp, delCum_servicetp, addCum_servicetp, updateCum_servicetp } from "@/api/system/cum_servicetp";
-
+import { selectAllAdmManager } from "@/api/system/adm_manager";
+import { addAdm_service } from"@/api/system/adm_service";
+import { listAdm_clerk } from"@/api/system/adm_clerk";
+import { listCum_pet} from "@/api/system/cum_pet";
 export default {
   name: "Cum_servicetp",
   dicts: ['sys_shoufei'],
   data() {
     return {
+      options1:[],//店铺
+      options2:[],//店员
+      options3:[],//
       // 遮罩层
       loading: true,
       // 选中数组
@@ -107,6 +180,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      book: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -114,18 +188,14 @@ export default {
         stname: null,
         stmoney: null,
         stmtp: null,
-        stps: null
+        stps: null,
+        msname: null,
+        mid:null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        stname: [
-          { required: true, message: "服务名称不能为空", trigger: "blur" }
-        ],
-        stmoney: [
-          { required: true, message: "服务价格不能为空", trigger: "blur" }
-        ],
         stmtp: [
           { required: true, message: "收费方式不能为空", trigger: "change" }
         ],
@@ -134,8 +204,20 @@ export default {
   },
   created() {
     this.getList();
+    this.selectAllAdmManager();
+    this.listCum_pet();
   },
   methods: {
+    listCum_pet(){
+      listCum_pet().then(response => {
+        this.options3=response.rows;
+      });
+    },
+    selectAllAdmManager(){
+      selectAllAdmManager().then(response => {
+        this.options1=response.rows;
+      });
+    },
     /** 查询服务种类列表 */
     getList() {
       this.loading = true;
@@ -148,6 +230,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.book = false;
       this.reset();
     },
     // 表单重置
@@ -157,7 +240,11 @@ export default {
         stname: null,
         stmoney: null,
         stmtp: null,
-        stps: null
+        stps: null,
+        clid: null,
+        stime: null,
+        sdate: null,
+        serstime:null
       };
       this.resetForm("form");
     },
@@ -190,7 +277,7 @@ export default {
       getCum_servicetp(stid).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改服务种类";
+        this.title = "查看服务种类";
       });
     },
     /** 提交按钮 */
@@ -213,21 +300,34 @@ export default {
         }
       });
     },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const stids = row.stid || this.ids;
-      this.$modal.confirm('是否确认删除服务种类编号为"' + stids + '"的数据项？').then(function() {
-        return delCum_servicetp(stids);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
-    },
     /** 导出按钮操作 */
     handleExport() {
       this.download('system/cum_servicetp/export', {
         ...this.queryParams
       }, `cum_servicetp_${new Date().getTime()}.xlsx`)
+    },
+    bookNew(row) {
+      this.reset();
+      this.form.stid=row.stid;
+      this.queryParams.stid=row.stid;
+      this.book=true;
+      listAdm_clerk(this.queryParams).then(response => {
+        this.options2 = response.rows;
+      });
+    },
+    serviceAdd(){
+      form.serstime=form.sdate+form.stime
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          console.log(this.form);
+          addAdm_service(this.form).then(response => {
+            this.$modal.msgSuccess("新增成功");
+            this.book = false;
+          });
+        }
+      });
+      this.cancel();
+      this.reset();
     }
   }
 };

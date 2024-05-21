@@ -62,6 +62,60 @@ public class ManPsbsService extends BaseEntity
     @Excel(name = "服务花费")
     private Long sermoney;
 
+    private String stname;
+    private String clname;
+    private String msname;
+    private String pname;
+    private Long cuid;
+    private String cuname;
+
+    public String getStname() {
+        return stname;
+    }
+
+    public void setStname(String stname) {
+        this.stname = stname;
+    }
+
+    public String getClname() {
+        return clname;
+    }
+
+    public void setClname(String clname) {
+        this.clname = clname;
+    }
+
+    public String getMsname() {
+        return msname;
+    }
+
+    public void setMsname(String msname) {
+        this.msname = msname;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public Long getCuid() {
+        return cuid;
+    }
+
+    public void setCuid(Long cuid) {
+        this.cuid = cuid;
+    }
+
+    public String getCuname() {
+        return cuname;
+    }
+
+    public void setCuname(String cuname) {
+        this.cuname = cuname;
+    }
     public void setSerid(Long serid) 
     {
         this.serid = serid;

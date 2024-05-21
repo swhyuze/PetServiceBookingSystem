@@ -4,6 +4,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.adm.domain.AdmPsbsClerk;
+import com.ruoyi.system.adm.domain.AdmPsbsManager;
+import com.ruoyi.system.adm.service.IAdmPsbsClerkService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +38,8 @@ public class ClkPsbsServiceController extends BaseController
 {
     @Autowired
     private IClkPsbsServiceService clkPsbsServiceService;
+    @Autowired
+    private IAdmPsbsClerkService admPsbsClerkService;
     /**
      * 查询订单查询列表
      */
@@ -42,6 +47,9 @@ public class ClkPsbsServiceController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ClkPsbsService clkPsbsService)
     {
+        AdmPsbsClerk admPsbsClerk=new AdmPsbsClerk();
+        admPsbsClerk.setUid(SecurityUtils.getUserId());
+        clkPsbsService.setClid(admPsbsClerkService.selectAdmPsbsClerkList(admPsbsClerk).get(0).getClid());
         startPage();
         List<ClkPsbsService> list = clkPsbsServiceService.selectClkPsbsServiceList(clkPsbsService);
         return getDataTable(list);

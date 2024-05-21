@@ -24,27 +24,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectManPsbsClerkVo">
-        select clid, clname, clsex, clnum, mid, uid from psbs_clerk
+        SELECT psbs_clerk.*,
+               sys_user.user_name AS uname,
+               sys_user.phonenumber AS clnum,
+               sys_user.sex AS clsex,
+               sys_user.nick_name AS clname
+        FROM psbs_clerk
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
     </sql>
 
     <select id="selectManPsbsClerkList" parameterType="ManPsbsClerk" resultMap="ManPsbsClerkResult">
-        SELECT psbs_clerk.*,sys_user.user_name AS uname FROM psbs_clerk
-        LEFT JOIN sys_user ON psbs_clerk.uid=sys_user.user_id
-        <where>  
-            <if test="clname != null  and clname != ''"> and clname like concat('%', #{clname}, '%')</if>
-            <if test="clsex != null "> and clsex = #{clsex}</if>
+        SELECT psbs_clerk.*,
+        sys_user.user_name AS uname,
+        sys_user.phonenumber AS clnum,
+        sys_user.sex AS clsex,
+        sys_user.nick_name AS clname
+        FROM psbs_clerk
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
+        <where>
+            <if test="clname != null  and clname != ''"> and sys_user.nick_name like concat('%', #{clname}, '%')</if>
+            <if test="clsex != null "> and sys_user.sex = #{clsex}</if>
             <if test="clnum != null  and clnum != ''"> and clnum = #{clnum}</if>
-            <if test="mid != null "> and mid like concat('%', #{mid}, '%')</if>
-            <if test="uid != null "> and uid like concat('%', #{uid}, '%')</if>
+            <if test="uid != null "> and psbs_clerk.uid like concat('%', #{uid}, '%')</if>
+            <if test="mid != null "> and mid = #{mid}</if>
         </where>
     </select>
     
     <select id="selectManPsbsClerkByClid" parameterType="Long" resultMap="ManPsbsClerkManPsbsClkserResult">
-        select a.clid, a.clname, a.clsex, a.clnum, a.mid, a.uid,
- b.clser as sub_clser, b.clid as sub_clid, b.stid as sub_stid
-        from psbs_clerk a
-        left join psbs_clkser b on b.clid = a.clid
-        where a.clid = #{clid}
+        SELECT psbs_clerk.*,
+               sys_user.user_name AS uname,
+               sys_user.phonenumber AS clnum,
+               sys_user.sex AS clsex,
+               sys_user.nick_name AS clname,
+               psbs_clkser.clser as sub_clser,
+               psbs_clkser.clid as sub_clid,
+               psbs_clkser.stid as sub_stid
+        from psbs_clerk
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
+        left join psbs_clkser on psbs_clkser.clid = psbs_clerk.clid
+        where psbs_clerk.clid = #{clid}
     </select>
         
     <insert id="insertManPsbsClerk" parameterType="ManPsbsClerk" useGeneratedKeys="true" keyProperty="clid">
@@ -68,13 +86,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateManPsbsClerk" parameterType="ManPsbsClerk">
         update psbs_clerk
         <trim prefix="SET" suffixOverrides=",">
-            <if test="clname != null and clname != ''">clname = #{clname},</if>
-            <if test="clsex != null">clsex = #{clsex},</if>
-            <if test="clnum != null">clnum = #{clnum},</if>
             <if test="mid != null">mid = #{mid},</if>
-            <if test="uid != null">uid = #{uid},</if>
         </trim>
-        where clid = #{clid}
+        where clid = #{clid};
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clname != null">nick_name = #{clname},</if>
+            <if test="clsex != null">sex = #{clsex},</if>
+        </trim>
+        where user_id = #{uid};
     </update>
 
     <delete id="deleteManPsbsClerkByClid" parameterType="Long">
