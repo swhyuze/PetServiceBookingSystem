@@ -2,6 +2,7 @@ package com.ruoyi.system.adm.service;
 
 import java.util.List;
 import com.ruoyi.system.adm.domain.AdmPsbsPet;
+import com.ruoyi.system.adm.domain.AdmPsbsService;
 
 /**
  * 宠物管理Service接口
@@ -58,4 +59,5 @@ public interface IAdmPsbsPetService
      * @return 结果
      */
     public int deleteAdmPsbsPetByPid(Long pid);
+    List<AdmPsbsPet> selectPet(AdmPsbsService admPsbsService);
 }

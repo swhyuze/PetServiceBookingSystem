@@ -1,22 +1,26 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="服务种类" prop="stname">
-        <el-input
-          v-model="queryParams.stname"
-          placeholder="请输入服务种类"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="宠物种类" prop="ptname">
-        <el-input
-          v-model="queryParams.ptname"
-          placeholder="请输入宠物种类"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      <el-form-item label="服务编号" prop="stid">
+          <el-select v-model="queryParams.stid" placeholder="请选择服务种类" filterable clearable>
+            <el-option
+              v-for="dict in option2"
+              :key="dict.stid"
+              :label="dict.stname"
+              :value="parseInt(dict.stid)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="宠物品种" prop="ptid">
+          <el-select v-model="queryParams.ptid" placeholder="请选择宠物品种" filterable clearable>
+            <el-option
+              v-for="dict in option1"
+              :key="dict.ptid"
+              :label="dict.ptname"
+              :value="parseInt(dict.ptid)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>

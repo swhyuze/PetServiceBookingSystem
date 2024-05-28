@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAdmPsbsServicetpVo">
-        select stid, stname, stmoney, stmtp, stps from psbs_servicetp
+        select stid, stname, stmoney, stmtp, stps,sttime from psbs_servicetp
     </sql>
 
     <select id="selectAdmPsbsServicetpList" parameterType="AdmPsbsServicetp" resultMap="AdmPsbsServicetpResult">
@@ -71,5 +71,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAllAdmServicetp" parameterType="AdmPsbsServicetp" resultMap="AdmPsbsServicetpResult">
         select * from psbs_servicetp
+    </select>
+
+    <select id="selectSerivetp" parameterType="AdmPsbsServicetp" resultMap="AdmPsbsServicetpResult">
+        SELECT psbs_servicetp.* FROM psbs_clkser
+        LEFT JOIN psbs_servicetp ON psbs_servicetp.stid=psbs_clkser.stid
+        LEFT JOIN psbs_clerk ON psbs_clkser.clid=psbs_clerk.clid
+        LEFT JOIN psbs_petser ON psbs_petser.stid=psbs_servicetp.stid
+        LEFT JOIN psbs_pet ON psbs_petser.ptid=psbs_pet.ptid
+        <where>
+            <if test="mid != null "> and psbs_clerk.mid = #{mid}</if>
+            <if test="pid != null "> and psbs_pet.pid = #{pid}</if>
+        </where>
+        GROUP BY stid
     </select>
 </mapper>

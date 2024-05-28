@@ -16,8 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectAdmPsbsCustomerVo">
         SELECT psbs_customer.*,
                sys_user.user_name AS uname,
-               sys_user.phonenumber AS unum,
-               sys_user.nick_name AS unikename,
+               sys_user.phonenumber AS cunum,
+               sys_user.nick_name AS cuname,
                sys_user.sex AS cusex FROM psbs_customer
         LEFT JOIN sys_user ON psbs_customer.uid=sys_user.user_id
     </sql>
@@ -26,9 +26,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectAdmPsbsCustomerVo"/>
         <where>  
             <if test="cusex != null "> and sys_user.sex = #{cusex}</if>
-            <if test="unum != null  and unum != ''"> and sys_user.phonenumber like concat('%', #{unum}, '%')</if>
+            <if test="unum != null  and unum != ''"> and sys_user.phonenumber like concat('%', #{cunum}, '%')</if>
             <if test="uname != null  and uname != ''"> and sys_user.user_name like concat('%', #{uname}, '%')</if>
-            <if test="unikename != null  and unikename != ''"> and sys_user.nick_name like concat('%', #{unikename}, '%')</if>
+            <if test="unikename != null  and unikename != ''"> and sys_user.nick_name like concat('%', #{cuname}, '%')</if>
             <if test="uid != null "> and uid like concat('%', #{uid}, '%')</if>
             <if test="cutp != null "> and cutp = #{cutp}</if>
         </where>

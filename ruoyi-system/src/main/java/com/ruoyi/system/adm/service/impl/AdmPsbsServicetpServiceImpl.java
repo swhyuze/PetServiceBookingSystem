@@ -42,7 +42,10 @@ public class AdmPsbsServicetpServiceImpl implements IAdmPsbsServicetpService
     {
         return admPsbsServicetpMapper.selectAdmPsbsServicetpList(admPsbsServicetp);
     }
-
+    @Override
+    public List<AdmPsbsServicetp> selectSerivetp(AdmPsbsServicetp admPsbsServicetp){
+        return admPsbsServicetpMapper.selectSerivetp(admPsbsServicetp);
+    }
     /**
      * 新增服务种类
      * 
@@ -95,4 +98,5 @@ public class AdmPsbsServicetpServiceImpl implements IAdmPsbsServicetpService
     public List<AdmPsbsServicetp> selectAllAdmServicetp(){
         return admPsbsServicetpMapper.selectAllAdmServicetp();
     }
+
 }

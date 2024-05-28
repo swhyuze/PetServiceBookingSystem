@@ -44,7 +44,17 @@ public class AdmPsbsClerk extends BaseEntity
     /** 店员服务信息 */
     private List<AdmPsbsClkser> admPsbsClkserList;
 
-    public void setClid(Long clid) 
+    private Long stid;
+
+    public Long getStid() {
+        return stid;
+    }
+
+    public void setStid(Long stid) {
+        this.stid = stid;
+    }
+
+    public void setClid(Long clid)
     {
         this.clid = clid;
     }
@@ -98,6 +108,7 @@ public class AdmPsbsClerk extends BaseEntity
     {
         return uid;
     }
+
 
     public List<AdmPsbsClkser> getAdmPsbsClkserList()
     {

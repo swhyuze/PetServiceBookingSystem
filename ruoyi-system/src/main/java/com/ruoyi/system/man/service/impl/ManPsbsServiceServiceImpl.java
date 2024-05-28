@@ -90,4 +90,7 @@ public class ManPsbsServiceServiceImpl implements IManPsbsServiceService
     {
         return manPsbsServiceMapper.deleteManPsbsServiceBySerid(serid);
     }
+    public List<ManPsbsService> selectTime(ManPsbsService manPsbsService){
+        return manPsbsServiceMapper.selectTime(manPsbsService);
+    }
 }

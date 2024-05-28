@@ -42,3 +42,49 @@ export function delMan_service(serid) {
     method: 'delete'
   })
 }
+
+export function selectCumstomer() {
+  return request({
+    url: '/system/man_service/selectCumstomer',
+    method: 'get',
+  })
+}
+
+export function selectPet(query) {
+  return request({
+    url: '/system/man_service/selectPet',
+    method: 'get',
+    params: query
+  })
+}
+
+export function selectSerivetp(query) {
+  return request({
+    url: '/system/man_service/selectSerivetp',
+    method: 'get',
+    params: query
+  })
+}
+
+export function selectClerk(query) {
+  return request({
+    url: '/system/man_service/selectClerk',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getMid() {
+  return request({
+    url: '/system/man_service/getMid',
+    method: 'get',
+  })
+}
+
+export function selectTime(query) {
+  return request({
+    url: '/system/man_service/selectTime',
+    method: 'get',
+    params: query
+  })
+}

@@ -1,5 +1,6 @@
 package com.ruoyi.system.man.domain;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -37,15 +38,17 @@ public class ManPsbsService extends BaseEntity
     private Long pid;
 
     /** 服务开始时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "服务开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "服务开始时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date serstime;
 
     /** 服务结束时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "服务结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "服务结束时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date seretime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date sersdate;
     /** 服务评分 */
     @Excel(name = "服务评分")
     private Long serscore;
@@ -60,7 +63,7 @@ public class ManPsbsService extends BaseEntity
 
     /** 服务花费 */
     @Excel(name = "服务花费")
-    private Long sermoney;
+    private Double sermoney;
 
     private String stname;
     private String clname;
@@ -68,6 +71,15 @@ public class ManPsbsService extends BaseEntity
     private String pname;
     private Long cuid;
     private String cuname;
+    private Long sttime;
+
+    public Long getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(Long sttime) {
+        this.sttime = sttime;
+    }
 
     public String getStname() {
         return stname;
@@ -206,14 +218,23 @@ public class ManPsbsService extends BaseEntity
     {
         return serstate;
     }
-    public void setSermoney(Long sermoney) 
+    public void setSermoney(Double sermoney)
     {
-        this.sermoney = sermoney;
+        DecimalFormat df = new DecimalFormat("#.00");
+        this.sermoney = new Double(df.format(sermoney));
     }
 
-    public Long getSermoney() 
+    public Double getSermoney()
     {
         return sermoney;
+    }
+
+    public Date getSersdate() {
+        return sersdate;
+    }
+
+    public void setSersdate(Date sersdate) {
+        this.sersdate = sersdate;
     }
 
     @Override

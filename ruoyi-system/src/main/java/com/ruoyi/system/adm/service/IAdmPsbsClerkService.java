@@ -58,4 +58,5 @@ public interface IAdmPsbsClerkService
      * @return 结果
      */
     public int deleteAdmPsbsClerkByClid(Long clid);
+    public List<AdmPsbsClerk> selectClerk(AdmPsbsClerk admPsbsClerk);
 }

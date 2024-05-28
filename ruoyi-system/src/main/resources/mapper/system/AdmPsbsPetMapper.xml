@@ -27,6 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pps != null  and pps != ''"> and pps = #{pps}</if>
             <if test="psex != null "> and psex = #{psex}</if>
             <if test="ptid != null "> and ptid = #{ptid}</if>
+            <if test="cuid != null "> and psbs_pet.cuid = #{cuid}</if>
             <if test="ptname != null  and ptname != ''"> and psbs_pettp.ptname like concat('%', #{ptname}, '%')</if>
             <if test="pthost != null  and pthost != ''"> and sys_user.nick_name like concat('%', #{pthost}, '%')</if>
         </where>
@@ -77,4 +78,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{pid}
         </foreach>
     </delete>
+
+    <select id="selectPet" parameterType="AdmPsbsPet" resultMap="AdmPsbsPetResult">
+        SELECT psbs_pet.* FROM psbs_pet
+        LEFT JOIN psbs_petser ON psbs_petser.ptid=psbs_pet.ptid
+        <where>
+            <if test="stid != null "> and psbs_petser.stid = #{stid}</if>
+            <if test="cuid != null "> and psbs_pet.cuid = #{cuid}</if>
+        </where>
+    </select>
 </mapper>

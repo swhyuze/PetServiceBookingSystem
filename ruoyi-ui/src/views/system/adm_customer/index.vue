@@ -84,8 +84,8 @@
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.cusex"/>
         </template>
       </el-table-column>
-      <el-table-column label="顾客电话" align="center" prop="unum" />
-      <el-table-column label="顾客姓名" align="center" prop="unikename" />
+      <el-table-column label="顾客电话" align="center" prop="cunum" />
+      <el-table-column label="顾客姓名" align="center" prop="cuname" />
       <el-table-column label="登录账号" align="center" prop="uname" />
       <el-table-column label="顾客类型" align="center" prop="cutp">
         <template slot-scope="scope">

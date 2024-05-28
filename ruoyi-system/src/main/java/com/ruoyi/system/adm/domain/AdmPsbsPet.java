@@ -36,7 +36,7 @@ public class AdmPsbsPet extends BaseEntity
 
     /** 宠物照片 */
     private String ptpic;
-
+    private Long cuid;
     private String pthost;
     private String ptname;
 
@@ -109,6 +109,14 @@ public class AdmPsbsPet extends BaseEntity
     public String getPtpic() 
     {
         return ptpic;
+    }
+
+    public Long getCuid() {
+        return cuid;
+    }
+
+    public void setCuid(Long cuid) {
+        this.cuid = cuid;
     }
 
     @Override

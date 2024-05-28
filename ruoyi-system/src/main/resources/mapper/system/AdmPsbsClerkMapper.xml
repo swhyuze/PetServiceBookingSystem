@@ -120,4 +120,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ( #{item.clser}, #{item.clid}, #{item.stid})
         </foreach>
     </insert>
+
+    <select id="selectClerk" parameterType="AdmPsbsClerk" resultMap="AdmPsbsClerkResult">
+        SELECT psbs_clerk.*,sys_user.nick_name AS clname FROM psbs_clerk
+        LEFT JOIN psbs_clkser ON psbs_clkser.clid=psbs_clerk.clid
+        LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
+        <where>
+            <if test="clid != null "> and psbs_clerk.clid = #{clid}</if>
+            <if test="mid != null "> and psbs_clerk.mid = #{mid}</if>
+            <if test="stid != null "> and psbs_clkser.stid = #{stid}</if>
+        </where>
+    </select>
 </mapper>

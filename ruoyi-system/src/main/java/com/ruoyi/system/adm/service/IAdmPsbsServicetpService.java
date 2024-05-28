@@ -26,7 +26,7 @@ public interface IAdmPsbsServicetpService
      * @return 服务种类集合
      */
     public List<AdmPsbsServicetp> selectAdmPsbsServicetpList(AdmPsbsServicetp admPsbsServicetp);
-
+    public List<AdmPsbsServicetp> selectSerivetp(AdmPsbsServicetp admPsbsServicetp);
     /**
      * 新增服务种类
      * 
@@ -60,4 +60,5 @@ public interface IAdmPsbsServicetpService
     public int deleteAdmPsbsServicetpByStid(Long stid);
 
     public List<AdmPsbsServicetp> selectAllAdmServicetp();
+
 }

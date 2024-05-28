@@ -33,7 +33,14 @@ public class ClkPsbsServicetp extends BaseEntity
     private String stps;
 
     private Long uid;
+    private Long sttime;
+    public Long getSttime() {
+        return sttime;
+    }
 
+    public void setSttime(Long sttime) {
+        this.sttime = sttime;
+    }
     public Long getUid() {
         return uid;
     }

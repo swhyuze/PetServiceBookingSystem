@@ -128,4 +128,7 @@ public class AdmPsbsClerkServiceImpl implements IAdmPsbsClerkService
             }
         }
     }
+    public List<AdmPsbsClerk> selectClerk(AdmPsbsClerk admPsbsClerk){
+        return admPsbsClerkMapper.selectClerk(admPsbsClerk);
+    }
 }

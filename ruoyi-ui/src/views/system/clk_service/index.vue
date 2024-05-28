@@ -80,12 +80,12 @@
       <el-table-column label="宠物" align="center" prop="pname" />
       <el-table-column label="服务开始时间" align="center" prop="serstime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.serstime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ parseTime(scope.row.serstime, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="服务结束时间" align="center" prop="seretime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.seretime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ parseTime(scope.row.seretime, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="服务评分" align="center" prop="serscore">
@@ -315,7 +315,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加订单查询";
+      this.title = "新增订单";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -324,7 +324,7 @@ export default {
       getClk_service(serid).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改订单查询";
+        this.title = "订单信息";
       });
     },
     /** 提交按钮 */
@@ -354,7 +354,7 @@ export default {
           this.form = response.data;
           if(this.form.serstate==0){
             this.form.serstate=2;
-            updateCum_service(this.form);
+            updateClk_service(this.form);
             this.getList();
             this.$modal.msgSuccess("完成成功");
           }

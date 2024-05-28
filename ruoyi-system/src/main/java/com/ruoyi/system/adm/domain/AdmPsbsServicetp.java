@@ -33,6 +33,16 @@ public class AdmPsbsServicetp extends BaseEntity
     /** 服务描述 */
     private String stps;
 
+    private Long mid;
+    private Long pid;
+    private Long sttime;
+    public Long getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(Long sttime) {
+        this.sttime = sttime;
+    }
     public void setStid(Long stid) 
     {
         this.stid = stid;
@@ -77,6 +87,22 @@ public class AdmPsbsServicetp extends BaseEntity
     public String getStps() 
     {
         return stps;
+    }
+
+    public Long getMid() {
+        return mid;
+    }
+
+    public void setMid(Long mid) {
+        this.mid = mid;
+    }
+
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 
     @Override

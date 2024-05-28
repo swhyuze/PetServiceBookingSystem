@@ -2,6 +2,7 @@ package com.ruoyi.system.adm.mapper;
 
 import java.util.List;
 import com.ruoyi.system.adm.domain.AdmPsbsPet;
+import com.ruoyi.system.adm.domain.AdmPsbsService;
 
 /**
  * 宠物管理Mapper接口
@@ -58,4 +59,5 @@ public interface AdmPsbsPetMapper
      * @return 结果
      */
     public int deleteAdmPsbsPetByPids(Long[] pids);
+    List<AdmPsbsPet> selectPet(AdmPsbsService admPsbsService);
 }

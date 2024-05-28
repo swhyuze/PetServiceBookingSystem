@@ -1,11 +1,13 @@
 package com.ruoyi.system.man.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.utils.SecurityUtils;
-import com.ruoyi.system.adm.domain.AdmPsbsManager;
-import com.ruoyi.system.adm.service.IAdmPsbsManagerService;
+import com.ruoyi.system.adm.domain.*;
+import com.ruoyi.system.adm.service.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +41,14 @@ public class ManPsbsServiceController extends BaseController
     private IManPsbsServiceService manPsbsServiceService;
     @Autowired
     private IAdmPsbsManagerService admPsbsManagerService;
+    @Autowired
+    private IAdmPsbsCustomerService admPsbsCustomerService;
+    @Autowired
+    private IAdmPsbsPetService admPsbsPetService;
+    @Autowired
+    private IAdmPsbsClerkService admPsbsClerkService;
+    @Autowired
+    private IAdmPsbsServicetpService admPsbsServicetpService;
     /**
      * 查询订单管理列表
      */
@@ -85,6 +95,21 @@ public class ManPsbsServiceController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ManPsbsService manPsbsService)
     {
+        Long sttime=admPsbsServicetpService.selectAdmPsbsServicetpByStid(manPsbsService.getStid()).getSttime();
+        System.out.println(sttime);
+        Date endDate= (Date) manPsbsService.getSerstime().clone();
+        endDate.setTime(endDate.getTime()+sttime*60*1000);
+        manPsbsService.setSeretime(endDate);
+        manPsbsService.setSerstate((long)0);
+        List<ManPsbsService> list=manPsbsServiceService.selectTime(manPsbsService);
+        if (manPsbsService.getSeretime().getHours()<9||manPsbsService.getSeretime().getHours()>20){
+            return toAjax(0);
+        }
+        for (ManPsbsService service : list) {
+            if (service.getSerstime().before(manPsbsService.getSeretime()) && service.getSeretime().after(manPsbsService.getSerstime())) {
+                return toAjax(0);
+            }
+        }
         return toAjax(manPsbsServiceService.insertManPsbsService(manPsbsService));
     }
 
@@ -108,5 +133,45 @@ public class ManPsbsServiceController extends BaseController
     public AjaxResult remove(@PathVariable Long[] serids)
     {
         return toAjax(manPsbsServiceService.deleteManPsbsServiceBySerids(serids));
+    }
+
+    @GetMapping("/getMid")
+    public TableDataInfo getMid(ManPsbsService manPsbsService)
+    {
+        List list=new ArrayList<>();
+        AdmPsbsManager admPsbsManager=new AdmPsbsManager();
+        admPsbsManager.setUid(SecurityUtils.getUserId());
+        admPsbsManagerService.selectAdmPsbsManagerList(admPsbsManager).get(0).getMid();
+        list.add(admPsbsManagerService.selectAdmPsbsManagerList(admPsbsManager).get(0).getMid());
+        list.add(admPsbsManagerService.selectAdmPsbsManagerList(admPsbsManager).get(0).getMsname());
+        return getDataTable(list);
+    }
+    @GetMapping("/selectCumstomer")
+    public TableDataInfo selectCumstomer(){
+        List<AdmPsbsCustomer> list = admPsbsCustomerService.selectAdmPsbsCustomerList(new AdmPsbsCustomer());
+        return getDataTable(list);
+    }
+    @GetMapping("/selectPet")
+    public TableDataInfo selectPet(AdmPsbsPet admPsbsPet){
+        List<AdmPsbsPet> list=admPsbsPetService.selectAdmPsbsPetList(admPsbsPet);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/selectSerivetp")
+    public TableDataInfo selectSerivetp(AdmPsbsServicetp admPsbsServicetp){
+        List<AdmPsbsServicetp> list=admPsbsServicetpService.selectSerivetp(admPsbsServicetp);
+        return getDataTable(list);
+    }
+    @GetMapping("/selectClerk")
+    public TableDataInfo selectSerivetp(AdmPsbsClerk admPsbsClerk){
+        List<AdmPsbsClerk> list=admPsbsClerkService.selectClerk(admPsbsClerk);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/selectTime")
+    public TableDataInfo selectTime(ManPsbsService manPsbsService){
+        manPsbsService.setSerstate((long)0);
+        List<ManPsbsService> list=manPsbsServiceService.selectTime(manPsbsService);
+        return getDataTable(list);
     }
 }

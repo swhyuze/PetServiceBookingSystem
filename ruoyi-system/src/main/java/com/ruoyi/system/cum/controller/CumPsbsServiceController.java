@@ -1,10 +1,18 @@
 package com.ruoyi.system.cum.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.adm.domain.AdmPsbsPet;
+import com.ruoyi.system.adm.domain.AdmPsbsService;
+import com.ruoyi.system.adm.domain.AdmPsbsServicetp;
 import com.ruoyi.system.adm.service.IAdmPsbsCustomerService;
+import com.ruoyi.system.adm.service.IAdmPsbsPetService;
+import com.ruoyi.system.adm.service.IAdmPsbsServicetpService;
+import com.ruoyi.system.man.domain.ManPsbsService;
+import com.ruoyi.system.man.service.IManPsbsServiceService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +47,13 @@ public class CumPsbsServiceController extends BaseController
 
     @Autowired
     private IAdmPsbsCustomerService admPsbsCustomerService;
+
+    @Autowired
+    private IAdmPsbsServicetpService admPsbsServicetpService;
+    @Autowired
+    private IManPsbsServiceService manPsbsServiceService;
+    @Autowired
+    private IAdmPsbsPetService admPsbsPetService;
     /**
      * 查询订单查询列表
      */
@@ -83,6 +98,25 @@ public class CumPsbsServiceController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody CumPsbsService cumPsbsService)
     {
+        cumPsbsService.setCuid(admPsbsCustomerService.selectAdmPsbsCustomerByUid(SecurityUtils.getUserId()).getCuid());
+        Long sttime=admPsbsServicetpService.selectAdmPsbsServicetpByStid(cumPsbsService.getStid()).getSttime();
+        System.out.println(sttime);
+        Date endDate= (Date) cumPsbsService.getSerstime().clone();
+        endDate.setTime(endDate.getTime()+sttime*60*1000);
+        cumPsbsService.setSeretime(endDate);
+        ManPsbsService manPsbsService=new ManPsbsService();
+        manPsbsService.setClid(cumPsbsService.getClid());
+        manPsbsService.setSersdate(cumPsbsService.getSersdate());
+        manPsbsService.setSerstate((long)0);
+        List<ManPsbsService> list=manPsbsServiceService.selectTime(manPsbsService);
+        if (cumPsbsService.getSeretime().getHours()<9||cumPsbsService.getSeretime().getHours()>20){
+            return toAjax(0);
+        }
+        for (ManPsbsService service : list) {
+            if (service.getSerstime().before(cumPsbsService.getSeretime()) && service.getSeretime().after(cumPsbsService.getSerstime())) {
+                return toAjax(0);
+            }
+        }
         return toAjax(cumPsbsServiceService.insertCumPsbsService(cumPsbsService));
     }
 
@@ -106,5 +140,12 @@ public class CumPsbsServiceController extends BaseController
     public AjaxResult remove(@PathVariable Long[] serids)
     {
         return toAjax(cumPsbsServiceService.deleteCumPsbsServiceBySerids(serids));
+    }
+
+    @GetMapping("/selectPet")
+    public TableDataInfo selectPet(AdmPsbsService admPsbsService){
+        admPsbsService.setCuid(admPsbsCustomerService.selectAdmPsbsCustomerByUid(SecurityUtils.getUserId()).getCuid());
+        List<AdmPsbsPet> list=admPsbsPetService.selectPet(admPsbsService);
+        return getDataTable(list);
     }
 }

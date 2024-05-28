@@ -28,9 +28,19 @@ public class ManPsbsServicetp extends BaseEntity
 
     /** 收费方式 */
     private Long stmtp;
-
     /** 服务描述 */
     private String stps;
+    private Long sttime;
+
+    public Long getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(Long sttime) {
+        this.sttime = sttime;
+    }
+
+
 
     public void setStid(Long stid) 
     {

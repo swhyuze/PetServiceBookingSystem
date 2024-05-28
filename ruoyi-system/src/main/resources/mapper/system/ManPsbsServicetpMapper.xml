@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectManPsbsServicetpVo">
-        select stid, stname, stmoney, stmtp, stps from psbs_servicetp
+        select * from psbs_servicetp
     </sql>
 
     <select id="selectManPsbsServicetpList" parameterType="ManPsbsServicetp" resultMap="ManPsbsServicetpResult">

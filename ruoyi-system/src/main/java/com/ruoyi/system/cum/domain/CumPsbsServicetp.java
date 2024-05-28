@@ -39,6 +39,7 @@ public class CumPsbsServicetp extends BaseEntity
     private long mid;
     private String msname;
 
+
     public long getMid() {
         return mid;
     }

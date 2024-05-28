@@ -1,5 +1,6 @@
 package com.ruoyi.system.cum.domain;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -60,7 +61,7 @@ public class CumPsbsService extends BaseEntity
 
     /** 服务花费 */
     @Excel(name = "服务花费")
-    private Long sermoney;
+    private Double sermoney;
 
     private String stname;
     private String clname;
@@ -68,6 +69,15 @@ public class CumPsbsService extends BaseEntity
     private String pname;
     private Long cuid;
     private String cuname;
+    private Date sersdate;
+
+    public Date getSersdate() {
+        return sersdate;
+    }
+
+    public void setSersdate(Date sersdate) {
+        this.sersdate = sersdate;
+    }
 
     public String getStname() {
         return stname;
@@ -207,12 +217,13 @@ public class CumPsbsService extends BaseEntity
     {
         return serstate;
     }
-    public void setSermoney(Long sermoney) 
+    public void setSermoney(Double sermoney)
     {
-        this.sermoney = sermoney;
+        DecimalFormat df = new DecimalFormat("#.00");
+        this.sermoney = new Double(df.format(sermoney));
     }
 
-    public Long getSermoney() 
+    public Double getSermoney()
     {
         return sermoney;
     }

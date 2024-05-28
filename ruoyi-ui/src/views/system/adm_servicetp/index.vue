@@ -9,14 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="服务价格" prop="stmoney">
-        <el-input
-          v-model="queryParams.stmoney"
-          placeholder="请输入服务价格"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="收费方式" prop="stmtp">
         <el-select v-model="queryParams.stmtp" placeholder="请选择收费方式" clearable>
           <el-option
@@ -26,14 +18,6 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="服务描述" prop="stps">
-        <el-input
-          v-model="queryParams.stps"
-          placeholder="请输入服务描述"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>

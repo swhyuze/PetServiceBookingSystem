@@ -1,6 +1,8 @@
 package com.ruoyi.system.adm.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.system.adm.domain.AdmPsbsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.adm.mapper.AdmPsbsPetMapper;
@@ -89,5 +91,10 @@ public class AdmPsbsPetServiceImpl implements IAdmPsbsPetService
     public int deleteAdmPsbsPetByPid(Long pid)
     {
         return admPsbsPetMapper.deleteAdmPsbsPetByPid(pid);
+    }
+
+    @Override
+    public List<AdmPsbsPet> selectPet(AdmPsbsService admPsbsService){
+        return admPsbsPetMapper.selectPet(admPsbsService);
     }
 }

@@ -22,8 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectAdmPsbsPetserList" parameterType="AdmPsbsPetser" resultMap="AdmPsbsPetserResult">
         <include refid="selectAdmPsbsPetserVo"/>
         <where>  
-            <if test="stid != null "> and stid = #{stid}</if>
-            <if test="ptid != null "> and ptid = #{ptid}</if>
+            <if test="stid != null "> and psbs_servicetp.stid = #{stid}</if>
+            <if test="ptid != null "> and psbs_pettp.ptid = #{ptid}</if>
             <if test="ptname != null  and ptname != ''"> and psbs_pettp.ptname like concat('%', #{ptname}, '%')</if>
             <if test="stname != null  and stname != ''"> and psbs_servicetp.stname like concat('%', #{stname}, '%')</if>
         </where>

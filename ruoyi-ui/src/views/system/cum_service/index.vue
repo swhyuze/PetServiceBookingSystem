@@ -62,12 +62,7 @@
       <el-table-column label="店员" align="center" prop="clname" />
       <el-table-column label="宠物店" align="center" prop="msname" />
       <el-table-column label="宠物" align="center" prop="pname" />
-      <el-table-column label="服务评分" align="center" prop="serscore">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_service_score" :value="scope.row.serscore"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="服务评价" align="center" prop="serassess" />
+      <el-table-column label="服务时间" align="center" prop="serstime" />
       <el-table-column label="服务状态" align="center" prop="serstate">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_service_state" :value="scope.row.serstate"/>
@@ -82,14 +77,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:cum_service:edit']"
-          >修改</el-button>
+          >查看</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:cum_service:remove']"
-          >删除</el-button>
+          >取消</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -102,7 +97,6 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改订单查询对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="服务种类" prop="stname">

@@ -58,4 +58,6 @@ public interface IManPsbsServiceService
      * @return 结果
      */
     public int deleteManPsbsServiceBySerid(Long serid);
+
+    public List<ManPsbsService> selectTime(ManPsbsService manPsbsService);
 }

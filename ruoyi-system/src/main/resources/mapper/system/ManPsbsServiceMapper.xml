@@ -16,6 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="serassess"    column="serassess"    />
         <result property="serstate"    column="serstate"    />
         <result property="sermoney"    column="sermoney"    />
+        <result property="sttime"    column="sttime"    />
     </resultMap>
 
     <sql id="selectManPsbsServiceVo">
@@ -23,13 +24,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                psbs_pet.pname AS pname,
                psbs_servicetp.stname AS stname,
                psbs_manager.msname AS msname,
-               sys_user.nick_name AS clname
+               sys_user.nick_name AS clname,
+               a.nick_name AS cuname,
+               psbs_servicetp.sttime AS sttime
         FROM psbs_service
         LEFT JOIN psbs_pet ON psbs_service.pid=psbs_pet.pid
         LEFT JOIN psbs_servicetp ON psbs_service.stid=psbs_servicetp.stid
         LEFT JOIN psbs_manager ON psbs_manager.mid=psbs_service.mid
         LEFT JOIN psbs_clerk ON psbs_clerk.clid=psbs_service.clid
         LEFT JOIN sys_user ON sys_user.user_id=psbs_clerk.uid
+        LEFT JOIN psbs_customer ON psbs_customer.cuid=psbs_service.cuid
+        LEFT JOIN sys_user a ON psbs_customer.uid=a.user_id
     </sql>
 
     <select id="selectManPsbsServiceList" parameterType="ManPsbsService" resultMap="ManPsbsServiceResult">
@@ -37,9 +42,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="stid != null "> and stid = #{stid}</if>
             <if test="clid != null "> and psbs_service.clid = #{clid}</if>
-            <if test="mid != null "> and mid = #{mid}</if>
+            <if test="mid != null "> and psbs_service.mid = #{mid}</if>
             <if test="pid != null "> and pid = #{pid}</if>
             <if test="cuid != null "> and psbs_service.cuid = #{cuid}</if>
+            <if test="sersdate != null "> and date(sersdate)=#{sersdate}</if>
             <if test="serstime != null "> and date(serstime)=#{serstime}</if>
             <if test="seretime != null "> and date(seretime)=#{seretime}</if>
             <if test="serscore != null "> and serscore = #{serscore}</if>
@@ -47,9 +53,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serstate != null "> and serstate = #{serstate}</if>
             <if test="sermoney != null "> and sermoney = #{sermoney}</if>
             <if test="stname != null "> and psbs_servicetp.stname like concat('%', #{stname}, '%')</if>
-            <if test="clname != null "> and sys_user.nick_name like concat('%', #{clname}, '%')</if>
+            <if test="clname != null "> and a.nick_name like concat('%', #{clname}, '%')</if>
             <if test="msname != null "> and psbs_manager.msname like concat('%', #{msname}, '%')</if>
             <if test="pname != null "> and psbs_pet.pname like concat('%', #{pname}, '%')</if>
+            <if test="cuname != null "> and a.nick_name like concat('%', #{cuname}, '%')</if>
         </where>
     </select>
     
@@ -71,6 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serassess != null">serassess,</if>
             <if test="serstate != null">serstate,</if>
             <if test="sermoney != null">sermoney,</if>
+            <if test="cuid != null">cuid,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="stid != null">#{stid},</if>
@@ -83,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serassess != null">#{serassess},</if>
             <if test="serstate != null">#{serstate},</if>
             <if test="sermoney != null">#{sermoney},</if>
+            <if test="cuid != null">#{cuid},</if>
          </trim>
     </insert>
 
@@ -113,4 +122,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{serid}
         </foreach>
     </delete>
+
+    <select id="selectTime" parameterType="ManPsbsService" resultMap="ManPsbsServiceResult">
+        SELECT psbs_service.serstime,psbs_service.seretime
+        FROM psbs_service
+        <where>
+            <if test="clid != null "> and psbs_service.clid = #{clid}</if>
+            <if test="sersdate != null "> and date(psbs_service.serstime)=#{sersdate}</if>
+
+        </where>
+    </select>
 </mapper>

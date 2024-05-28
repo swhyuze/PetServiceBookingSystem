@@ -66,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="clid != null">clid,</if>
             <if test="mid != null">mid,</if>
             <if test="pid != null">pid,</if>
+            <if test="cuid != null">cuid,</if>
             <if test="serstime != null">serstime,</if>
             <if test="seretime != null">seretime,</if>
             <if test="serscore != null">serscore,</if>
@@ -78,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="clid != null">#{clid},</if>
             <if test="mid != null">#{mid},</if>
             <if test="pid != null">#{pid},</if>
+            <if test="cuid != null">#{cuid},</if>
             <if test="serstime != null">#{serstime},</if>
             <if test="seretime != null">#{seretime},</if>
             <if test="serscore != null">#{serscore},</if>

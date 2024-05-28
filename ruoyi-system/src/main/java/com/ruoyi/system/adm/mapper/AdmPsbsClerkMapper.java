@@ -84,4 +84,5 @@ public interface AdmPsbsClerkMapper
      * @return 结果
      */
     public int deleteAdmPsbsClkserByClid(Long clid);
+    public List<AdmPsbsClerk> selectClerk(AdmPsbsClerk admPsbsClerk);
 }

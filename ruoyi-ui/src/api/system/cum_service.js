@@ -42,3 +42,11 @@ export function delCum_service(serid) {
     method: 'delete'
   })
 }
+
+export function selectPet(query) {
+  return request({
+    url: '/system/cum_service/selectPet',
+    method: 'get',
+    params: query
+  })
+}

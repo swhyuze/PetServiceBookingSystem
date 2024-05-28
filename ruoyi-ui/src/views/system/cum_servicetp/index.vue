@@ -20,7 +20,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="店铺" prop="mid">
-        <el-select v-model="queryParams.mid" placeholder="请选择店铺" clearable filterable="true">
+        <el-select v-model="queryParams.mid" placeholder="请选择店铺" clearable filterable>
           <el-option
             v-for="dict in options1"
             :key="dict.mid"
@@ -101,11 +101,11 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-
+    <!-- 预约 -->
     <el-dialog :title="title" :visible.sync="book" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="宠物名称" prop="pid">
-          <el-select v-model="form.pid" placeholder="请选择收费方式" clearable>
+      <el-form ref="form" :model="newForm" :rules="rules" label-width="80px">
+        <el-form-item label="宠物" prop="pid">
+          <el-select v-model="newForm.pid" placeholder="请选择收费方式" clearable>
             <el-option
               v-for="dict in options3"
               :key="dict.pid"
@@ -115,7 +115,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="服务人员" prop="clid">
-          <el-select v-model="form.stmtp" placeholder="请选择收费方式" clearable>
+          <el-select v-model="newForm.clid" placeholder="请选择收费方式" clearable>
             <el-option
               v-for="dict in options2"
               :key="dict.clid"
@@ -124,24 +124,42 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="服务日期" prop="sdate">
+        <el-form-item label="日期" prop="sersdate" >
           <el-date-picker clearable
-            v-model="form.sdate"
+            v-model="newForm.sersdate"
             type="date"
+            value-format="yyyy-MM-dd"
+            @change="selectTime()"
             placeholder="请选择服务日期">
           </el-date-picker>
+          <el-popover
+            placement="right"
+            title="不可使用时间"
+            width="400"
+            trigger="click">
+            <ul>
+              <li>
+                <el-table :data="can_time">
+                  <el-table-column property="serstime" label="开始时间" width="150"></el-table-column>
+                  <el-table-column property="seretime" label="结束时间" width="150"></el-table-column>
+                </el-table>
+              </li>
+            </ul>
+            <el-button slot="reference">查询</el-button>
+          </el-popover>
         </el-form-item>
-        <el-form-item label="开始时间" prop="stime">
-          <el-time-picker clearable
-            v-model="form.stime"
-            type="time"
+        <el-form-item label="开始时间" prop="serstime" >
+          <el-date-picker clearable
+            v-model="newForm.serstime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="请选择服务开始时间">
-          </el-time-picker>
+          </el-date-picker>
         </el-form-item>
         
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="serviceAdd">确 定</el-button>
+        <el-button type="primary" @click="submit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -151,9 +169,9 @@
 <script>
 import { listCum_servicetp, getCum_servicetp, delCum_servicetp, addCum_servicetp, updateCum_servicetp } from "@/api/system/cum_servicetp";
 import { selectAllAdmManager } from "@/api/system/adm_manager";
-import { addAdm_service } from"@/api/system/adm_service";
 import { listAdm_clerk } from"@/api/system/adm_clerk";
-import { listCum_pet} from "@/api/system/cum_pet";
+import { selectTime } from "@/api/system/man_service";
+import { addCum_service, selectPet } from "@/api/system/cum_service";
 export default {
   name: "Cum_servicetp",
   dicts: ['sys_shoufei'],
@@ -162,6 +180,8 @@ export default {
       options1:[],//店铺
       options2:[],//店员
       options3:[],//
+      newForm:{},
+      can_time: null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -196,8 +216,14 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        stmtp: [
-          { required: true, message: "收费方式不能为空", trigger: "change" }
+        clid: [
+          { required: true, message: "未选中店员", trigger: "change" }
+        ],
+        pid: [
+          { required: true, message: "未选中宠物", trigger: "change" }
+        ],
+        serstime: [
+          { required: true, message: "未选择时间", trigger: "change" }
         ],
       }
     };
@@ -205,11 +231,20 @@ export default {
   created() {
     this.getList();
     this.selectAllAdmManager();
-    this.listCum_pet();
   },
   methods: {
+    selectTime(){
+      console.log(this.newForm);
+      selectTime(this.newForm).then(response=>{
+        console.log(response);
+        this.can_time = response.rows.map(item => ({
+          serstime: item.serstime,
+          seretime: item.seretime
+        })); 
+      })
+    },
     listCum_pet(){
-      listCum_pet().then(response => {
+      selectPet(this.newForm).then(response=>{
         this.options3=response.rows;
       });
     },
@@ -264,12 +299,6 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加服务种类";
-    },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -277,7 +306,7 @@ export default {
       getCum_servicetp(stid).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "查看服务种类";
+        this.title = "查看服务信息";
       });
     },
     /** 提交按钮 */
@@ -307,27 +336,23 @@ export default {
       }, `cum_servicetp_${new Date().getTime()}.xlsx`)
     },
     bookNew(row) {
-      this.reset();
-      this.form.stid=row.stid;
+      this.newForm.stid=row.stid;
+      this.newForm.mid=this.queryParams.mid;
       this.queryParams.stid=row.stid;
+      this.listCum_pet();
+      console.log(this.newForm);
       this.book=true;
       listAdm_clerk(this.queryParams).then(response => {
         this.options2 = response.rows;
       });
     },
-    serviceAdd(){
-      form.serstime=form.sdate+form.stime
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          console.log(this.form);
-          addAdm_service(this.form).then(response => {
-            this.$modal.msgSuccess("新增成功");
-            this.book = false;
-          });
-        }
+    submit(){
+      console.log(this.newForm);
+      addCum_service(this.newForm).then(response => {
+        this.$modal.msgSuccess("新增成功");
+        this.book = false;
+        this.getList();
       });
-      this.cancel();
-      this.reset();
     }
   }
 };
