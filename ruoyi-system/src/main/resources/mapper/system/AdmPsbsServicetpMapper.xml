@@ -38,12 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stmoney != null">stmoney,</if>
             <if test="stmtp != null">stmtp,</if>
             <if test="stps != null">stps,</if>
+            <if test="sttime != null">sttime,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="stname != null and stname != ''">#{stname},</if>
             <if test="stmoney != null">#{stmoney},</if>
             <if test="stmtp != null">#{stmtp},</if>
             <if test="stps != null">#{stps},</if>
+            <if test="sttime != null">#{sttime},</if>
          </trim>
     </insert>
 
@@ -54,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stmoney != null">stmoney = #{stmoney},</if>
             <if test="stmtp != null">stmtp = #{stmtp},</if>
             <if test="stps != null">stps = #{stps},</if>
+            <if test="sttime != null">sttime = #{sttime},</if>
         </trim>
         where stid = #{stid}
     </update>

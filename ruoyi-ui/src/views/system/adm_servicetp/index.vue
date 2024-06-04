@@ -76,6 +76,7 @@
       <el-table-column label="服务种类编号" align="center" prop="stid" />
       <el-table-column label="服务名称" align="center" prop="stname" />
       <el-table-column label="服务价格" align="center" prop="stmoney" />
+      <el-table-column label="服务时长" align="center" prop="sttime" /> 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -125,6 +126,9 @@
         </el-form-item>
         <el-form-item label="服务描述" prop="stps">
           <el-input v-model="form.stps" placeholder="请输入服务描述" />
+        </el-form-item>
+        <el-form-item label="服务时间" prop="sttime">
+          <el-input v-model="form.sttime" placeholder="请输入服务时长" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
